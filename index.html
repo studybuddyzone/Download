@@ -216,6 +216,19 @@
     <div class="hero" id="hero" aria-label="Featured"></div>
 
     <section class="blk">
+      <div class="sh"><div><h2>Featured on Infinity</h2></div></div>
+      <div class="orig">
+        <div class="ic" style="background:#fff;width:84px;height:84px;border-radius:20px"><img src="icon.png" alt="StudyBuddyZone icon"></div>
+        <div class="meta">
+          <span class="badge">Direct download · Android</span>
+          <h3>StudyBuddyZone</h3>
+          <p>Notes, PYQs and answer keys for engineering students — by branch and semester. Xevrontech · 4.0 ★ · 5K+ downloads</p>
+        </div>
+        <button class="btn" id="sbz" type="button">Install APK</button>
+      </div>
+    </section>
+
+    <section class="blk">
       <div class="sh"><div><h2>Top free apps</h2><p>What everyone is installing right now</p></div></div>
       <div class="cols" id="topApps"></div>
     </section>
@@ -230,18 +243,6 @@
       <div class="cols" id="dailyApps"></div>
     </section>
 
-    <section class="blk">
-      <div class="sh"><div><h2>Only on Infinity</h2></div></div>
-      <div class="orig">
-        <div class="ic" style="background:#fff"><img src="icon.png" alt="StudyBuddyZone icon"></div>
-        <div class="meta">
-          <span class="badge">Direct download · Android</span>
-          <h3>StudyBuddyZone</h3>
-          <p>Notes, PYQs and answer keys for engineering students — by branch and semester. Xevrontech · 4.0 ★ · 5K+ downloads</p>
-        </div>
-        <a class="btn" id="sbz" href="app-release.apk" download="StudyBuddyPro.apk">Install APK</a>
-      </div>
-    </section>
   </div>
 
   <div id="listView" class="hide">
@@ -282,6 +283,8 @@
    (rating / downloads / size are sample values for the demo)
    ============================================================ */
 var APPS = [
+  {id:'studybuddy', n:'StudyBuddyZone', dev:'Xevrontech', cat:'Education', type:'app', apk:'app-release.apk', img:'icon.png', r:4.0, dl:'5K+', sz:'~10 MB', age:'18+', c:['#0fb89a','#1565c0'], g:'S', tag:'Engineering notes & PYQs', top:0,
+   desc:'Notes, PYQs and answer keys for engineering students — organised by branch and semester, ready the night before the exam. Pick your branch, choose your year and open subject-wise study resources, question banks and academic materials in one place. Android only; downloads directly as an APK.'},
   // ---- apps ----
   {id:'whatsapp', n:'WhatsApp Messenger', dev:'WhatsApp LLC', cat:'Social', type:'app', play:'com.whatsapp', ios:'310633997', r:4.3, dl:'5B+', sz:'60 MB', age:'12+', c:['#25d366','#128c7e'], g:'W', tag:'Simple, reliable, private messaging', top:1,
    desc:'Message and call friends and family for free, anywhere. Share photos, videos, documents and your location, create group chats and stay in touch with end-to-end encryption.'},
@@ -345,7 +348,7 @@ var $ = function(s,r){return (r||document).querySelector(s)};
 var byId = {}; APPS.forEach(function(a){byId[a.id]=a});
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function grad(a){return 'linear-gradient(145deg,'+a.c.join(',')+')'}
-function icon(a,cls){return '<span class="ic '+(cls||'')+'" style="background:'+grad(a)+'" aria-hidden="true">'+esc(a.g)+'</span>'}
+function icon(a,cls){if(a.img)return '<span class="ic '+(cls||'')+'" style="background:#fff" aria-hidden="true"><img src="'+a.img+'" alt=""></span>';return '<span class="ic '+(cls||'')+'" style="background:'+grad(a)+'" aria-hidden="true">'+esc(a.g)+'</span>'}
 var STAR='<svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.3l-6.2 3.7 1.6-7L2 9.2l7.2-.6L12 2l2.8 6.6 7.2.6-5.4 4.8 1.6 7z"/></svg>';
 function playUrl(a){return 'https://play.google.com/store/apps/details?id='+encodeURIComponent(a.play)}
 function iosUrl(a){return 'https://apps.apple.com/app/id'+encodeURIComponent(a.ios)}
@@ -360,11 +363,16 @@ function toast(m){var t=$('#toast');t.textContent=m;t.classList.add('show');clea
 /* GET button: phones go straight to their own store; desktop opens the chooser */
 function getApp(id){
   var a=byId[id]; if(!a) return;
+  if(a.apk){ downloadApk(); return; }
   if(OS==='android'){ toast('Opening Google Play…'); location.href=playUrl(a); }
   else if(OS==='ios'){ toast('Opening App Store…'); location.href=iosUrl(a); }
   else openSheet(id);
 }
 
+function downloadApk(){
+  var l=document.createElement('a'); l.href='app-release.apk?v='+Date.now(); l.download='StudyBuddyPro.apk';
+  document.body.appendChild(l); l.click(); l.remove(); toast('Downloading StudyBuddyPro.apk…');
+}
 /* ---------- renderers ---------- */
 function row(a,rank){
   return '<div class="row" data-open="'+a.id+'" role="button" tabindex="0">'+
@@ -383,6 +391,7 @@ function columns(list){
 }
 function renderHome(){
   var feat=[
+    {id:'studybuddy',eye:'Featured · Infinity pick',t:'Ace every exam with notes, PYQs & answer keys',c:['#0fb89a','#1565c0']},
     {id:'duolingo',eye:'App of the day',t:'Learn a new language, one tiny lesson at a time',c:['#58cc02','#1cb0f6']},
     {id:'minecraft',eye:'Game of the day',t:'Build whatever your imagination can reach',c:['#3a7d2c','#1d3b6e']},
     {id:'spotify',eye:'Now trending',t:'Your soundtrack for every mood',c:['#1db954','#191414']},
@@ -397,7 +406,7 @@ function renderHome(){
       '<button class="getbtn" data-get="'+a.id+'">Get</button></div></div>';
   }).join('');
 
-  var apps=APPS.filter(function(a){return a.type==='app'}).sort(function(a,b){return a.top-b.top});
+  var apps=APPS.filter(function(a){return a.type==='app'}).sort(function(a,b){return (a.id==='studybuddy'?-1:a.top)-(b.id==='studybuddy'?-1:b.top)});
   $('#topApps').innerHTML=columns(apps.slice(0,9));
   $('#gamesRail').innerHTML=APPS.filter(function(a){return a.type==='game'}).map(function(a){
     return '<button class="tile" data-open="'+a.id+'">'+icon(a)+'<b>'+esc(a.n)+'</b><small>'+esc(a.cat)+' · '+a.r.toFixed(1)+STAR+'</small></button>';
@@ -416,6 +425,7 @@ function renderList(){
     if(q&&(a.n+' '+a.dev+' '+a.cat+' '+a.tag).toLowerCase().indexOf(q)<0)return false;
     return true;
   });
+  list.sort(function(a,b){return (b.id==='studybuddy')-(a.id==='studybuddy')});
   $('#listTitle').textContent=q?'Results for “'+state.q.trim()+'”':state.tab==='game'?'Games':state.tab==='app'?'Apps':'All apps & games';
   $('#listSub').textContent=list.length+' '+(list.length===1?'result':'results');
   $('#grid').innerHTML=list.map(function(a){return row(a)}).join('');
@@ -446,9 +456,9 @@ function openSheet(id){
      '<div class="stat"><b>'+esc(a.dl)+'</b><span>Downloads</span></div>'+
      '<div class="stat"><b><span class="age">'+esc(a.age)+'</span></b><span>Rated for '+esc(a.age)+'</span></div>'+
      '<div class="stat"><b>'+esc(a.sz)+'</b><span>Size</span></div></div>'+
-   '<div class="stores">'+
+   (a.apk?'<div class="stores" style="grid-template-columns:1fr"><a class="store" href="#" data-apk><span><small>Direct download · Android</small><b>Install APK</b></span></a></div>':'<div class="stores">'+
      '<a class="store" href="'+playUrl(a)+'" target="_blank" rel="noopener">'+PLAY_SVG+'<span><small>Get it on</small><b>Google Play</b></span></a>'+
-     '<a class="store" href="'+iosUrl(a)+'" target="_blank" rel="noopener">'+IOS_SVG+'<span><small>Download on the</small><b>App Store</b></span></a></div>'+
+     '<a class="store" href="'+iosUrl(a)+'" target="_blank" rel="noopener">'+IOS_SVG+'<span><small>Download on the</small><b>App Store</b></span></a></div>')+
    '<h3>About this app</h3><p class="desc">'+esc(a.desc)+'</p>';
   if(typeof sheet.showModal==='function') sheet.showModal(); else sheet.setAttribute('open','');
 }
@@ -458,6 +468,7 @@ sheet.addEventListener('click',function(e){ if(e.target===sheet) closeSheet(); }
 
 /* ---------- events ---------- */
 document.addEventListener('click',function(e){
+  if(e.target.closest('[data-apk]')){ e.preventDefault(); downloadApk(); return; }
   var g=e.target.closest('[data-get]');
   if(g){ e.stopPropagation(); getApp(g.dataset.get); return; }
   var o=e.target.closest('[data-open]');
@@ -477,7 +488,7 @@ qi.addEventListener('input',function(){state.q=qi.value;$('#searchBox').classLis
 $('#clear').addEventListener('click',function(){qi.value='';state.q='';$('#searchBox').classList.remove('has');render();qi.focus()});
 $('#home').addEventListener('click',function(e){e.preventDefault();qi.value='';state.q='';$('#searchBox').classList.remove('has');setTab('home')});
 $('#bsearch').addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});qi.focus()});
-$('#sbz').addEventListener('click',function(){this.href='app-release.apk?v='+Date.now();toast('Downloading StudyBuddyPro.apk…')});
+$('#sbz').addEventListener('click',downloadApk);
 
 renderHome(); render();
 </script>

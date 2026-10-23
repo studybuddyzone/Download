@@ -2,216 +2,484 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#ffffff">
-<title>StudyBuddyZone – Download for Android</title>
-<link rel="icon" href="icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111318" media="(prefers-color-scheme: dark)">
+<meta name="description" content="Infinity Store – discover apps and games, then get them on Google Play or the App Store.">
+<title>Infinity Store – Discover apps &amp; games</title>
+<link rel="icon" href="logo.svg" type="image/svg+xml">
 <style>
   :root{
-    --bg:#ffffff; --ink:#1f1f1f; --soft:#5f6368; --line:#e3e3e3;
-    --blue:#0b57d0; --blue-ink:#ffffff; --chip:#f0f4f9;
+    --bg:#ffffff; --surface:#f4f6fa; --card:#ffffff; --ink:#15171c; --soft:#5d6470; --line:#e4e7ee;
+    --accent:#2f6bff; --accent-ink:#fff; --get:#eef1f8; --get-ink:#2f6bff;
+    --play:#01875f; --shadow:0 1px 2px rgba(20,24,40,.08),0 4px 16px rgba(20,24,40,.06);
+    --nav-h:64px;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--bg:#111318;--surface:#1b1e26;--card:#1b1e26;--ink:#eceef3;--soft:#9aa1ae;--line:#2b2f3a;
+      --get:#2a2f3c;--get-ink:#8fb0ff;--accent:#5b8cff;--play:#34c28a;--shadow:0 1px 2px rgba(0,0,0,.4)}
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html{scroll-behavior:smooth}
   body{margin:0;background:var(--bg);color:var(--ink);
-    font-family:Roboto,"Google Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.45}
-  .page{max-width:560px;margin:0 auto;padding:0 20px 40px}
+    font-family:"Google Sans",Roboto,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",system-ui,sans-serif;line-height:1.4;
+    padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom))}
+  a{color:inherit}
+  button{font:inherit;color:inherit;cursor:pointer}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
 
-  /* top bar */
-  .bar{display:flex;align-items:center;height:56px;gap:10px;font-weight:500;color:var(--soft);font-size:14px}
-  .bar img{width:24px;height:24px;border-radius:6px}
+  /* ---------- top bar ---------- */
+  header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);
+    backdrop-filter:saturate(1.6) blur(14px);-webkit-backdrop-filter:saturate(1.6) blur(14px);border-bottom:1px solid var(--line)}
+  .top{display:flex;align-items:center;gap:16px;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;font-size:20px;letter-spacing:-.3px;flex:none}
+  .brand img{width:34px;height:34px;border-radius:10px}
+  .search{flex:1;max-width:560px;margin-left:auto;margin-right:auto;position:relative}
+  .search input{width:100%;height:44px;border-radius:999px;border:0;background:var(--surface);padding:0 44px 0 46px;
+    font:inherit;font-size:15px;color:var(--ink);outline:none;transition:box-shadow .15s}
+  .search input:focus{box-shadow:0 0 0 2px var(--accent)}
+  .search svg{position:absolute;left:15px;top:12px;width:20px;height:20px;color:var(--soft);pointer-events:none}
+  .search .clear{position:absolute;right:8px;top:7px;width:30px;height:30px;border:0;border-radius:50%;background:transparent;display:none;place-items:center;color:var(--soft)}
+  .search.has .clear{display:grid}
+  .dtabs{display:none;gap:4px;flex:none}
+  .dtabs button{border:0;background:none;padding:8px 14px;border-radius:999px;font-weight:500;font-size:14.5px;color:var(--soft)}
+  .dtabs button[aria-selected=true]{background:var(--surface);color:var(--ink)}
 
-  /* header */
-  .head{display:flex;gap:18px;align-items:flex-start;margin-top:8px}
-  .icon{width:92px;height:92px;border-radius:22px;flex:none;background:#fff;padding:10px;
-    box-shadow:0 1px 3px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.05)}
-  .icon img{width:100%;height:100%;object-fit:contain;display:block}
-  h1{font-size:26px;line-height:1.2;font-weight:500;margin:2px 0 6px;letter-spacing:-.2px}
-  .dev{color:var(--blue);font-weight:500;font-size:15px;text-decoration:none}
-  .sub{color:var(--soft);font-size:13px;margin-top:2px}
+  .hero,.cols,.rail,.chips{scroll-padding-left:20px}
+  /* ---------- bottom nav (mobile) ---------- */
+  nav.bottom{position:fixed;left:0;right:0;bottom:0;z-index:30;height:calc(var(--nav-h) + env(safe-area-inset-bottom));
+    padding-bottom:env(safe-area-inset-bottom);background:color-mix(in srgb,var(--bg) 90%,transparent);
+    backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--line);display:flex}
+  nav.bottom button{flex:1;border:0;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+    font-size:11.5px;font-weight:500;color:var(--soft)}
+  nav.bottom svg{width:24px;height:24px}
+  nav.bottom button[aria-selected=true]{color:var(--accent)}
+  @media (min-width:820px){
+    nav.bottom{display:none} body{padding-bottom:0} .dtabs{display:flex}
+  }
 
-  /* stats */
-  .stats{display:flex;margin:26px -4px 22px;text-align:center}
+  /* ---------- hero (App-Store "Today" cards) ---------- */
+  .hero{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:20px 20px 6px;margin:0 -20px;scrollbar-width:none}
+  .hero::-webkit-scrollbar{display:none}
+  .slide{flex:none;width:min(86vw,520px);height:360px;border-radius:26px;position:relative;overflow:hidden;scroll-snap-align:center;
+    color:#fff;padding:22px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:var(--shadow);cursor:pointer;border:0;text-align:left}
+  .slide .eyebrow{font-size:12px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;opacity:.85}
+  .slide h3{margin:6px 0 0;font-size:30px;line-height:1.12;font-weight:700;letter-spacing:-.5px;max-width:14ch}
+  .slide .glow{position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:rgba(255,255,255,.18);filter:blur(2px)}
+  .slide .glow.b{right:auto;left:-80px;top:auto;bottom:-110px;width:300px;height:300px;background:rgba(0,0,0,.12)}
+  .slide .big{position:absolute;right:22px;top:70px;width:132px;height:132px;border-radius:30px;font-size:64px;box-shadow:0 12px 30px rgba(0,0,0,.28)}
+  .slide .foot{position:relative;display:flex;align-items:center;gap:12px;background:rgba(0,0,0,.28);backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);border-radius:18px;padding:10px 12px}
+  .slide .foot .ic{width:48px;height:48px;border-radius:12px;font-size:22px}
+  .slide .foot b{display:block;font-size:15px;font-weight:600}
+  .slide .foot small{display:block;font-size:12.5px;opacity:.85}
+  .slide .foot .meta{flex:1;min-width:0}
+  .slide .foot .meta *{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .slide .getbtn{background:#fff;color:#111;margin-left:auto}
+
+  /* ---------- chips (Play-Store category chips) ---------- */
+  .chips{display:flex;gap:8px;overflow-x:auto;padding:18px 20px 4px;margin:0 -20px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:none;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:8px 16px;font-size:14px;font-weight:500;transition:.15s}
+  .chip:hover{background:var(--surface)}
+  .chip[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+
+  /* ---------- sections ---------- */
+  section.blk{margin-top:30px}
+  .sh{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px}
+  .sh h2{font-size:22px;font-weight:700;margin:0;letter-spacing:-.3px}
+  .sh p{margin:2px 0 0;font-size:13.5px;color:var(--soft)}
+  .sh .more{border:0;background:none;color:var(--accent);font-weight:500;font-size:14.5px;padding:4px 0}
+
+  /* app icon */
+  .ic{display:grid;place-items:center;color:#fff;font-weight:700;flex:none;position:relative;overflow:hidden;
+    width:60px;height:60px;border-radius:14px;font-size:26px;letter-spacing:-.5px;box-shadow:0 0 0 1px rgba(0,0,0,.06),0 2px 6px rgba(0,0,0,.14)}
+  .ic::after{content:"";position:absolute;inset:0;background:linear-gradient(160deg,rgba(255,255,255,.28),transparent 45%)}
+  .ic img{width:100%;height:100%;object-fit:contain;background:#fff;padding:6px}
+
+  /* GET button (App-Store pill) */
+  .getbtn{border:0;background:var(--get);color:var(--get-ink);font-weight:700;font-size:14px;letter-spacing:.3px;
+    height:32px;padding:0 20px;border-radius:999px;text-transform:uppercase;flex:none;transition:filter .15s,transform .1s}
+  .getbtn:hover{filter:brightness(.96)} .getbtn:active{transform:scale(.96)}
+
+  /* ranked list columns (App-Store charts) */
+  .cols{display:grid;grid-auto-flow:column;grid-auto-columns:min(88vw,400px);gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;
+    padding:2px 20px 8px;margin:0 -20px;scrollbar-width:none}
+  .cols::-webkit-scrollbar{display:none}
+  .col{display:flex;flex-direction:column;scroll-snap-align:start}
+  .row{display:flex;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid var(--line);cursor:pointer;text-align:left;background:none;border-left:0;border-right:0;border-top:0;width:100%}
+  .col .row:last-child{border-bottom:0}
+  .row .rank{width:16px;text-align:center;font-weight:600;font-size:15px;color:var(--soft);flex:none}
+  .row .meta{flex:1;min-width:0}
+  .row .meta b{display:block;font-weight:600;font-size:15.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .row .meta small{display:block;color:var(--soft);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  /* Play-Store style rail cards */
+  .rail{display:flex;gap:16px;overflow-x:auto;padding:2px 20px 10px;margin:0 -20px;scrollbar-width:none;scroll-snap-type:x proximity}
+  .rail::-webkit-scrollbar{display:none}
+  .tile{flex:none;width:132px;border:0;background:none;text-align:left;padding:0;scroll-snap-align:start}
+  .tile .ic{width:132px;height:132px;border-radius:28px;font-size:54px}
+  .tile b{display:block;margin-top:9px;font-size:14.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tile small{display:flex;align-items:center;gap:4px;color:var(--soft);font-size:12.5px;margin-top:1px}
+  .star{width:11px;height:11px;fill:currentColor}
+
+  /* results grid */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:4px 28px}
+  .empty{padding:60px 0;text-align:center;color:var(--soft)}
+  .empty b{display:block;font-size:18px;color:var(--ink);margin-bottom:4px}
+
+  /* Infinity original (StudyBuddyZone) */
+  .orig{display:flex;gap:18px;align-items:center;flex-wrap:wrap;background:var(--surface);border-radius:24px;padding:20px}
+  .orig .ic{width:84px;height:84px;border-radius:20px}
+  .orig .meta{flex:1;min-width:220px}
+  .orig h3{margin:0;font-size:19px}
+  .orig p{margin:4px 0 0;color:var(--soft);font-size:14px}
+  .badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 22px;border-radius:999px;border:0;
+    background:var(--accent);color:var(--accent-ink);font-weight:600;font-size:15px;text-decoration:none}
+
+  footer{margin-top:44px;padding:22px 0 30px;border-top:1px solid var(--line);color:var(--soft);font-size:13px;display:flex;gap:10px 24px;flex-wrap:wrap;justify-content:space-between}
+  footer p{margin:0}
+
+  /* ---------- detail sheet ---------- */
+  dialog{border:0;padding:0;background:var(--bg);color:var(--ink);width:min(100%,640px);max-height:92vh;border-radius:28px;box-shadow:0 20px 70px rgba(0,0,0,.35);overflow:hidden}
+  dialog::backdrop{background:rgba(10,12,18,.55);backdrop-filter:blur(3px)}
+  @media (max-width:640px){
+    dialog{margin:auto 0 0;border-radius:28px 28px 0 0;width:100%;max-width:none;animation:up .28s ease}
+  }
+  @keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+  .sheet{display:flex;flex-direction:column;max-height:92vh}
+  .sheet-scroll{overflow-y:auto;padding:22px 22px 8px}
+  .sclose{position:absolute;right:14px;top:14px;width:36px;height:36px;border-radius:50%;border:0;background:var(--surface);display:grid;place-items:center;z-index:2}
+  .shead{display:flex;gap:16px;align-items:flex-start;padding-right:40px}
+  .shead .ic{width:92px;height:92px;border-radius:22px;font-size:40px}
+  .shead h2{margin:2px 0 3px;font-size:24px;line-height:1.2;letter-spacing:-.3px}
+  .shead .dev{color:var(--accent);font-weight:500;font-size:14.5px}
+  .shead .sub{color:var(--soft);font-size:13px}
+  .stats{display:flex;margin:22px -4px 18px;text-align:center}
   .stat{flex:1;padding:0 4px;min-width:0}
-  .stat + .stat{border-left:1px solid var(--line)}
-  .stat b{display:flex;align-items:center;justify-content:center;gap:3px;font-size:15px;font-weight:500;height:26px;white-space:nowrap}
-  .stat span{display:block;font-size:12px;color:var(--soft);margin-top:4px;white-space:nowrap}
-  .stat svg{width:14px;height:14px;fill:currentColor}
-  .age{display:inline-flex;align-items:center;justify-content:center;border:2px solid var(--ink);border-radius:4px;
-    font-weight:700;font-size:13px;line-height:1;padding:2px 3px}
-  .info{background:none;border:0;padding:0;margin-left:2px;color:var(--soft);cursor:pointer;vertical-align:-2px}
-  .info svg{width:14px;height:14px}
-
-  /* install */
-  .install{display:flex;align-items:center;justify-content:center;width:100%;height:48px;border-radius:999px;
-    background:var(--blue);color:var(--blue-ink);font-size:15px;font-weight:500;text-decoration:none;letter-spacing:.1px;
-    transition:filter .15s, transform .1s}
-  .install:hover{filter:brightness(1.08)} .install:active{transform:scale(.99)}
-  .note{font-size:12px;color:var(--soft);text-align:center;margin:10px 0 0}
-
-  /* screenshots */
-  .shots{display:flex;gap:12px;overflow-x:auto;margin:26px -20px 0;padding:2px 20px 14px;
-    scroll-snap-type:x proximity;scrollbar-width:none}
+  .stat+.stat{border-left:1px solid var(--line)}
+  .stat b{display:flex;align-items:center;justify-content:center;gap:3px;font-size:15px;font-weight:600;height:24px;white-space:nowrap}
+  .stat span{display:block;font-size:12px;color:var(--soft);margin-top:3px}
+  .age{display:inline-grid;place-items:center;border:2px solid currentColor;border-radius:4px;font-weight:700;font-size:12px;line-height:1;padding:2px 3px}
+  .stores{display:grid;gap:10px;grid-template-columns:1fr 1fr;margin-bottom:16px}
+  @media (max-width:420px){.stores{grid-template-columns:1fr}}
+  .store{display:flex;align-items:center;gap:12px;height:56px;padding:0 16px;border-radius:14px;background:#0d0f14;color:#fff;text-decoration:none;
+    border:1px solid #2c303b;transition:transform .1s,filter .15s}
+  .store:hover{filter:brightness(1.2)} .store:active{transform:scale(.98)}
+  .store svg{width:28px;height:28px;flex:none}
+  .store small{display:block;font-size:10.5px;letter-spacing:.4px;text-transform:uppercase;opacity:.75;line-height:1.1}
+  .store b{display:block;font-size:17px;font-weight:600;line-height:1.15}
+  .sheet h3{font-size:17px;margin:20px 0 8px}
+  .sheet p.desc{margin:0;color:var(--soft);font-size:14.5px}
+  .note{font-size:12.5px;color:var(--soft);text-align:center;padding:12px 22px 18px}
+  .shots{display:flex;gap:10px;overflow-x:auto;margin:10px -22px 0;padding:0 22px 8px;scrollbar-width:none}
   .shots::-webkit-scrollbar{display:none}
-  .shots a{flex:none;scroll-snap-align:start;display:block}
-  .shots img{display:block;height:300px;width:auto;aspect-ratio:771/1536;border-radius:14px;background:#eee;
-    box-shadow:0 1px 4px rgba(0,0,0,.2)}
+  .shots img{height:260px;width:auto;border-radius:14px;box-shadow:0 1px 4px rgba(0,0,0,.25);background:var(--surface)}
 
-  /* sections */
-  section{margin-top:26px}
-  .sh{display:flex;align-items:center;justify-content:space-between;margin:0 0 12px}
-  h2{font-size:19px;font-weight:500;margin:0}
-  .arrow{width:34px;height:34px;border-radius:50%;background:var(--chip);border:0;display:grid;place-items:center;cursor:pointer}
-  .arrow svg{width:18px;height:18px;transition:transform .2s}
-  .arrow[aria-expanded=true] svg{transform:rotate(90deg)}
-  .about p{margin:0 0 10px;color:#3c4043;font-size:14.5px}
-  .about .more{display:none}
-  .about.open .more{display:block}
-  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-  .chip{border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:13px;color:#3c4043}
-
-  /* install steps */
-  details{border:1px solid var(--line);border-radius:14px;padding:0 16px}
-  summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;
-    padding:14px 0;font-size:16px;font-weight:500}
-  summary::-webkit-details-marker{display:none}
-  summary svg{width:18px;height:18px;transition:transform .2s}
-  details[open] summary svg{transform:rotate(90deg)}
-  ol{margin:0 0 14px;padding-left:20px;color:#3c4043;font-size:14px}
-  ol li{margin-bottom:10px} ol li b{font-weight:500;color:var(--ink)}
-
-  .also{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:14px;padding:12px 16px;
-    text-decoration:none;color:var(--ink);font-size:14px}
-  .also svg{width:26px;height:26px;flex:none}
-  .also small{display:block;color:var(--soft);font-size:12px}
-
-  footer{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--soft);
-    display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px}
-  footer a{color:var(--soft)}
-
-  .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,16px);background:#303030;color:#fff;font-size:13.5px;
-    padding:10px 18px;border-radius:8px;opacity:0;pointer-events:none;transition:.25s;z-index:10;max-width:90vw;text-align:center}
+  .toast{position:fixed;left:50%;bottom:calc(var(--nav-h) + 16px);transform:translate(-50%,16px);background:#2b2e36;color:#fff;font-size:13.5px;
+    padding:10px 18px;border-radius:10px;opacity:0;pointer-events:none;transition:.25s;z-index:60;max-width:90vw;text-align:center}
   .toast.show{opacity:1;transform:translate(-50%,0)}
   :focus-visible{outline:3px solid #7cacf8;outline-offset:2px}
-  @media (min-width:700px){ .shots img{height:380px} }
+  .hide{display:none!important}
+  @media (min-width:820px){ .toast{bottom:24px} .slide{height:380px} }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+  @media (max-width:819px){
+    .top{flex-wrap:wrap;height:auto;padding-top:10px;padding-bottom:10px;gap:10px}
+    .search{flex:1 1 100%;max-width:none;order:3}
+    .slide h3{font-size:26px;max-width:calc(100% - 110px)}
+    .slide .big{width:88px;height:88px;font-size:42px;border-radius:22px;top:22px;right:22px}
+  }
+  .search input::-webkit-search-cancel-button{display:none}
 </style>
 </head>
 <body>
-<div class="page">
 
-  <div class="bar"><img src="icon.png" alt=""><span>StudyBuddyZone</span></div>
-
-  <div class="head">
-    <div class="icon"><img src="icon.png" alt="StudyBuddyZone app icon"></div>
-    <div>
-      <h1>StudyBuddyZone</h1>
-      <a class="dev" href="#about">Xevrontech</a>
-      <div class="sub">Education · Engineering notes &amp; PYQs</div>
+<header>
+  <div class="wrap top">
+    <a class="brand" href="#" id="home"><img src="logo.svg" alt="">Infinity Store</a>
+    <form class="search" id="searchBox" role="search" onsubmit="return false">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10.5 3a7.5 7.5 0 0 1 5.9 12.1l4.3 4.3-1.4 1.4-4.3-4.3A7.5 7.5 0 1 1 10.5 3zm0 2a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11z"/></svg>
+      <input id="q" type="search" placeholder="Search apps and games" autocomplete="off" aria-label="Search apps and games">
+      <button type="button" class="clear" id="clear" aria-label="Clear search"><svg viewBox="0 0 24 24" fill="currentColor" style="position:static;width:18px;height:18px"><path d="M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12z"/></svg></button>
+    </form>
+    <div class="dtabs" role="tablist" id="dtabs">
+      <button role="tab" data-tab="home" aria-selected="true">For you</button>
+      <button role="tab" data-tab="app" aria-selected="false">Apps</button>
+      <button role="tab" data-tab="game" aria-selected="false">Games</button>
     </div>
   </div>
+</header>
 
-  <div class="stats">
-    <div class="stat">
-      <b>4.0
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.3l-6.2 3.7 1.6-7L2 9.2l7.2-.6L12 2l2.8 6.6 7.2.6-5.4 4.8 1.6 7z"/></svg>
-      </b>
-      <span>Rating</span>
-    </div>
-    <div class="stat"><b>5K+</b><span>Downloads</span></div>
-    <div class="stat">
-      <b><span class="age">18+</span></b>
-      <span>Rated for 18+</span>
-    </div>
-    <div class="stat"><b id="size">~10 MB</b><span>Size</span></div>
+<main class="wrap">
+  <div id="homeView">
+    <div class="hero" id="hero" aria-label="Featured"></div>
+
+    <section class="blk">
+      <div class="sh"><div><h2>Top free apps</h2><p>What everyone is installing right now</p></div></div>
+      <div class="cols" id="topApps"></div>
+    </section>
+
+    <section class="blk">
+      <div class="sh"><div><h2>Games we love</h2><p>Play-worthy picks, free to start</p></div><button class="more" data-go="game">See all</button></div>
+      <div class="rail" id="gamesRail"></div>
+    </section>
+
+    <section class="blk">
+      <div class="sh"><div><h2>Shopping, food &amp; money</h2><p>Everyday apps for everyday life</p></div></div>
+      <div class="cols" id="dailyApps"></div>
+    </section>
+
+    <section class="blk">
+      <div class="sh"><div><h2>Only on Infinity</h2></div></div>
+      <div class="orig">
+        <div class="ic" style="background:#fff"><img src="icon.png" alt="StudyBuddyZone icon"></div>
+        <div class="meta">
+          <span class="badge">Direct download · Android</span>
+          <h3>StudyBuddyZone</h3>
+          <p>Notes, PYQs and answer keys for engineering students — by branch and semester. Xevrontech · 4.0 ★ · 5K+ downloads</p>
+        </div>
+        <a class="btn" id="sbz" href="app-release.apk" download="StudyBuddyPro.apk">Install APK</a>
+      </div>
+    </section>
   </div>
 
-  <!-- The file on the server is app-release.apk; the user saves it as StudyBuddyPro.apk -->
-  <a class="install" id="install" href="app-release.apk" download="StudyBuddyPro.apk">Install</a>
-  <p class="note">Android 7.0 and up · Free</p>
-
-  <div class="shots" aria-label="App screenshots">
-    <a href="screenshots/01-home.jpg" target="_blank" rel="noopener"><img src="screenshots/01-home.jpg" alt="Home screen" loading="lazy"></a>
-    <a href="screenshots/02-branch.jpg" target="_blank" rel="noopener"><img src="screenshots/02-branch.jpg" alt="Branch and subjects" loading="lazy"></a>
-    <a href="screenshots/03-profile.jpg" target="_blank" rel="noopener"><img src="screenshots/03-profile.jpg" alt="Profile" loading="lazy"></a>
-    <a href="screenshots/04-menu.jpg" target="_blank" rel="noopener"><img src="screenshots/04-menu.jpg" alt="Navigation menu" loading="lazy"></a>
-    <a href="screenshots/05-premium.jpg" target="_blank" rel="noopener"><img src="screenshots/05-premium.jpg" alt="Premium" loading="lazy"></a>
-    <a href="screenshots/06-subject.jpg" target="_blank" rel="noopener"><img src="screenshots/06-subject.jpg" alt="Study resources" loading="lazy"></a>
-    <a href="screenshots/07-question-bank.jpg" target="_blank" rel="noopener"><img src="screenshots/07-question-bank.jpg" alt="Question bank" loading="lazy"></a>
-    <a href="screenshots/08-academic-materials.jpg" target="_blank" rel="noopener"><img src="screenshots/08-academic-materials.jpg" alt="Academic materials" loading="lazy"></a>
-    <a href="screenshots/09-premium-lock.jpg" target="_blank" rel="noopener"><img src="screenshots/09-premium-lock.jpg" alt="Premium content" loading="lazy"></a>
+  <div id="listView" class="hide">
+    <div class="chips" id="chips" aria-label="Categories"></div>
+    <section class="blk" style="margin-top:18px">
+      <div class="sh"><div><h2 id="listTitle">Results</h2><p id="listSub"></p></div></div>
+      <div class="grid" id="grid"></div>
+      <div class="empty hide" id="empty"><b>No apps found</b>Try a different name or category.</div>
+    </section>
   </div>
-
-  <section class="about" id="about">
-    <div class="sh">
-      <h2>About this app</h2>
-      <button class="arrow" id="aboutBtn" type="button" aria-expanded="false" aria-label="Read more">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.6 16.6 13.2 12 8.6 7.4 10 6l6 6-6 6z"/></svg>
-      </button>
-    </div>
-    <p>Notes, PYQs and answer keys for engineering students — organised by branch and semester, ready the night before the exam.</p>
-    <p class="more">Pick your branch, choose your year and open subject-wise study resources, question banks and academic materials in one place. Premium subjects unlock extra content.</p>
-    <div class="chips">
-      <span class="chip">Mechanical</span><span class="chip">Civil</span><span class="chip">Electrical</span>
-      <span class="chip">ENTC</span><span class="chip">Computer</span><span class="chip">FY / SY / TY</span>
-    </div>
-  </section>
-
-  <section>
-    <details>
-      <summary>How to install
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.6 16.6 13.2 12 8.6 7.4 10 6l6 6-6 6z"/></svg>
-      </summary>
-      <ol>
-        <li><b>Tap “Install”.</b> StudyBuddyPro.apk saves to your Downloads folder.</li>
-        <li><b>Allow this source.</b> On the one-time prompt, tap Settings and switch on “Allow from this source” for your browser.</li>
-        <li><b>Open the file and tap Install.</b> If Play Protect shows a caution screen, that’s normal for apps installed outside the Play Store.</li>
-        <li><b>Open StudyBuddyZone</b> and start studying.</li>
-      </ol>
-    </details>
-  </section>
-
-  <section>
-    <a class="also" href="https://apps.microsoft.com/detail/9ndnjtwlpxcv?ocid=webpdpshare" target="_blank" rel="noopener">
-      <svg viewBox="0 0 23 23" aria-hidden="true">
-        <rect x="1" y="1" width="9.6" height="9.6" fill="#F25022"/><rect x="12.4" y="1" width="9.6" height="9.6" fill="#7FBA00"/>
-        <rect x="1" y="12.4" width="9.6" height="9.6" fill="#00A4EF"/><rect x="12.4" y="12.4" width="9.6" height="9.6" fill="#FFB900"/>
-      </svg>
-      <span>Also available on Microsoft Store<small>Windows</small></span>
-    </a>
-  </section>
 
   <footer>
-    <span>&copy; 2026 StudyBuddyZone &middot; Xevrontech</span>
-    <span><a href="privacy-policy.html">Privacy Policy</a> &middot; <a href="terms-conditions.html">Terms</a></span>
+    <p>&copy; 2026 Infinity Store. App names and logos belong to their respective owners.</p>
+    <p>Apps open on Google Play or the App Store &middot; <a href="privacy-policy.html">Privacy</a> &middot; <a href="terms-conditions.html">Terms</a></p>
   </footer>
-</div>
+</main>
 
+<nav class="bottom" id="bnav" role="tablist">
+  <button role="tab" data-tab="home" aria-selected="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 3 10.5V21h6v-6h6v6h6V10.5z"/></svg>For you</button>
+  <button role="tab" data-tab="app" aria-selected="false"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h7v7H4zm9 0h7v7h-7zM4 13h7v7H4zm9 0h7v7h-7z"/></svg>Apps</button>
+  <button role="tab" data-tab="game" aria-selected="false"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h4l2-3h6l2 3h4a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1zM9 12H7.5v1.5h-1V12H5v-1h1.5V9.5h1V11H9zm6.5 1a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm2.5-2a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>Games</button>
+  <button id="bsearch" aria-label="Search"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10.5 3a7.5 7.5 0 0 1 5.9 12.1l4.3 4.3-1.4 1.4-4.3-4.3A7.5 7.5 0 1 1 10.5 3zm0 2a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11z"/></svg>Search</button>
+</nav>
+
+<dialog id="sheet" aria-label="App details">
+  <div class="sheet">
+    <button class="sclose" id="sclose" aria-label="Close"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12z"/></svg></button>
+    <div class="sheet-scroll" id="sheetBody"></div>
+    <div class="note">Tapping a store button takes you straight to the official listing.</div>
+  </div>
+</dialog>
 <div class="toast" id="toast" role="status"></div>
 
 <script>
-  var tt;
-  function toast(msg){
-    var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
-    clearTimeout(tt); tt=setTimeout(function(){t.classList.remove('show')},2200);
+/* ============================================================
+   APP CATALOG  — edit freely.
+   play = Google Play package name   |   ios = App Store numeric id
+   (rating / downloads / size are sample values for the demo)
+   ============================================================ */
+var APPS = [
+  // ---- apps ----
+  {id:'whatsapp', n:'WhatsApp Messenger', dev:'WhatsApp LLC', cat:'Social', type:'app', play:'com.whatsapp', ios:'310633997', r:4.3, dl:'5B+', sz:'60 MB', age:'12+', c:['#25d366','#128c7e'], g:'W', tag:'Simple, reliable, private messaging', top:1,
+   desc:'Message and call friends and family for free, anywhere. Share photos, videos, documents and your location, create group chats and stay in touch with end-to-end encryption.'},
+  {id:'instagram', n:'Instagram', dev:'Instagram', cat:'Social', type:'app', play:'com.instagram.android', ios:'389801252', r:4.2, dl:'5B+', sz:'75 MB', age:'12+', c:['#feda75','#d62976','#4f5bd5'], g:'I', tag:'Reels, stories and friends', top:2,
+   desc:'Share photos and videos, watch Reels, chat with friends and discover creators you love.'},
+  {id:'youtube', n:'YouTube', dev:'Google LLC', cat:'Entertainment', type:'app', play:'com.google.android.youtube', ios:'544007664', r:4.2, dl:'10B+', sz:'48 MB', age:'12+', c:['#ff4e45','#c4170c'], g:'Y', tag:'Watch, share and subscribe', top:3,
+   desc:'Get the official YouTube app: watch what you love, from music videos to learning, gaming and live streams.'},
+  {id:'spotify', n:'Spotify: Music and Podcasts', dev:'Spotify AB', cat:'Entertainment', type:'app', play:'com.spotify.music', ios:'324684580', r:4.4, dl:'1B+', sz:'85 MB', age:'12+', c:['#1ed760','#0d7a35'], g:'S', tag:'Millions of songs, free to start', top:4,
+   desc:'Listen to music and podcasts on demand. Discover new tracks with personalised playlists.'},
+  {id:'telegram', n:'Telegram', dev:'Telegram FZ-LLC', cat:'Social', type:'app', play:'org.telegram.messenger', ios:'686449807', r:4.3, dl:'1B+', sz:'70 MB', age:'12+', c:['#37aee2','#1e6fb3'], g:'T', tag:'Fast, secure, cloud-based chat', top:5,
+   desc:'Pure instant messaging — simple, fast, secure and synced across all your devices.'},
+  {id:'netflix', n:'Netflix', dev:'Netflix, Inc.', cat:'Entertainment', type:'app', play:'com.netflix.mediaclient', ios:'363590051', r:4.3, dl:'1B+', sz:'55 MB', age:'16+', c:['#e50914','#7a0309'], g:'N', tag:'Movies and TV shows, anywhere', top:6,
+   desc:'Watch TV shows, movies and Netflix originals on your phone, and download to watch offline.'},
+  {id:'chrome', n:'Google Chrome', dev:'Google LLC', cat:'Productivity', type:'app', play:'com.android.chrome', ios:'535886823', r:4.3, dl:'10B+', sz:'60 MB', age:'3+', c:['#4285f4','#34a853'], g:'C', tag:'Fast, simple and secure browsing', top:7,
+   desc:'Browse fast with Chrome, with built-in Google search, tab sync and safe browsing protections.'},
+  {id:'maps', n:'Google Maps', dev:'Google LLC', cat:'Travel', type:'app', play:'com.google.android.apps.maps', ios:'585027354', r:4.3, dl:'10B+', sz:'55 MB', age:'3+', c:['#34a853','#1a73e8'], g:'M', tag:'Navigation and local discovery', top:8,
+   desc:'Real-time GPS navigation, traffic, transit and local business info to explore the world.'},
+  {id:'gmail', n:'Gmail', dev:'Google LLC', cat:'Productivity', type:'app', play:'com.google.android.gm', ios:'422689480', r:4.3, dl:'10B+', sz:'35 MB', age:'3+', c:['#ea4335','#b31412'], g:'G', tag:'Email by Google', top:9,
+   desc:'Gmail is email that is intuitive, efficient and useful — with powerful search and spam protection.'},
+  {id:'canva', n:'Canva: Design, Photo & Video', dev:'Canva', cat:'Productivity', type:'app', play:'com.canva.editor', ios:'897446215', r:4.6, dl:'500M+', sz:'80 MB', age:'3+', c:['#00c4cc','#7d2ae8'], g:'C', tag:'Create stunning designs fast', top:10,
+   desc:'Design posters, videos, resumes and social posts with thousands of templates.'},
+  {id:'duolingo', n:'Duolingo: Language Lessons', dev:'Duolingo', cat:'Education', type:'app', play:'com.duolingo', ios:'570060128', r:4.7, dl:'500M+', sz:'45 MB', age:'4+', c:['#89e219','#3fa000'], g:'D', tag:'Learn a language in minutes a day', top:11,
+   desc:'Learn Spanish, French, English and more with bite-sized, game-like lessons.'},
+  {id:'phonepe', n:'PhonePe: UPI Payments', dev:'PhonePe', cat:'Finance', type:'app', play:'com.phonepe.app', ios:'1170055821', r:4.3, dl:'500M+', sz:'60 MB', age:'3+', c:['#7a3fe0','#4a1aa8'], g:'P', tag:'Pay, recharge and invest', top:12,
+   desc:'Send money with UPI, pay bills, recharge, and invest — all from one app.'},
+  {id:'paytm', n:'Paytm: Secure UPI Payments', dev:'Paytm', cat:'Finance', type:'app', play:'net.one97.paytm', ios:'473941634', r:4.2, dl:'500M+', sz:'65 MB', age:'3+', c:['#00baf2','#012b72'], g:'P', tag:'UPI, wallet and bill payments', top:13,
+   desc:'Make UPI payments, recharge your phone, pay bills and book tickets quickly and securely.'},
+  {id:'amazon', n:'Amazon Shopping', dev:'Amazon Mobile LLC', cat:'Shopping', type:'app', play:'in.amazon.mShop.android.shopping', ios:'297606951', r:4.1, dl:'500M+', sz:'90 MB', age:'3+', c:['#ffb340','#e47911'], g:'A', tag:'Shop millions of products', top:14,
+   desc:'Browse, search and shop millions of products with fast delivery and easy returns.'},
+  {id:'flipkart', n:'Flipkart Online Shopping', dev:'Flipkart', cat:'Shopping', type:'app', play:'com.flipkart.android', ios:'742044692', r:4.4, dl:'500M+', sz:'45 MB', age:'3+', c:['#2874f0','#fbbf1b'], g:'F', tag:'Big deals on everything', top:15,
+   desc:'Shop for electronics, fashion, home and more with offers, EMI options and quick delivery.'},
+  {id:'zomato', n:'Zomato: Food Delivery', dev:'Zomato', cat:'Food', type:'app', play:'com.application.zomato', ios:'434613896', r:4.3, dl:'100M+', sz:'50 MB', age:'3+', c:['#ef4f5f','#b71c2c'], g:'Z', tag:'Order food, dine out, go out', top:16,
+   desc:'Order food delivery from top restaurants, book tables and discover great places to eat.'},
+  {id:'swiggy', n:'Swiggy: Food & Instamart', dev:'Swiggy', cat:'Food', type:'app', play:'in.swiggy.android', ios:'989540920', r:4.3, dl:'100M+', sz:'50 MB', age:'3+', c:['#ff8a3d','#e8590c'], g:'S', tag:'Food and groceries in minutes', top:17,
+   desc:'Get food and groceries delivered fast, with offers on restaurants near you.'},
+  {id:'uber', n:'Uber: Request a ride', dev:'Uber Technologies', cat:'Travel', type:'app', play:'com.ubercab', ios:'368677368', r:4.3, dl:'1B+', sz:'125 MB', age:'12+', c:['#2b2b2b','#000000'], g:'U', tag:'Get a ride in minutes', top:18,
+   desc:'Request a ride and get picked up in minutes, with upfront pricing and live tracking.'},
+
+  // ---- games ----
+  {id:'subway', n:'Subway Surfers', dev:'SYBO Games', cat:'Games', type:'game', play:'com.kiloo.subwaysurf', ios:'512939461', r:4.4, dl:'1B+', sz:'180 MB', age:'7+', c:['#ffc83d','#ff7a00'], g:'S', tag:'Dash, dodge and surf the rails', top:0,
+   desc:'Run through the subway, dodge trains and collect coins in the world’s favourite endless runner.'},
+  {id:'candy', n:'Candy Crush Saga', dev:'King', cat:'Games', type:'game', play:'com.king.candycrushsaga', ios:'553834731', r:4.5, dl:'1B+', sz:'110 MB', age:'3+', c:['#ff6bb5','#8a2be2'], g:'C', tag:'Match-3 puzzle fun', top:0,
+   desc:'Switch and match candies in thousands of sweet puzzle levels.'},
+  {id:'coc', n:'Clash of Clans', dev:'Supercell', cat:'Games', type:'game', play:'com.supercell.clashofclans', ios:'529479190', r:4.5, dl:'500M+', sz:'200 MB', age:'12+', c:['#f5a623','#a0522d'], g:'C', tag:'Build a village, raise a clan', top:0,
+   desc:'Build your village, train troops and battle players worldwide in this strategy classic.'},
+  {id:'roblox', n:'Roblox', dev:'Roblox Corporation', cat:'Games', type:'game', play:'com.roblox.client', ios:'431946152', r:4.4, dl:'1B+', sz:'150 MB', age:'12+', c:['#e2231a','#2b2b2b'], g:'R', tag:'Millions of worlds to explore', top:0,
+   desc:'Play millions of immersive 3D experiences created by a global community.'},
+  {id:'minecraft', n:'Minecraft', dev:'Mojang', cat:'Games', type:'game', play:'com.mojang.minecraftpe', ios:'479516143', r:4.6, dl:'100M+', sz:'700 MB', age:'10+', c:['#6bbf3a','#6b4a2b'], g:'M', tag:'Explore, build and survive', top:0,
+   desc:'Explore infinite worlds and build anything you can imagine.'},
+  {id:'amongus', n:'Among Us', dev:'Innersloth', cat:'Games', type:'game', play:'com.innersloth.spacemafia', ios:'1351168404', r:4.2, dl:'500M+', sz:'125 MB', age:'10+', c:['#c51111','#3b1d6e'], g:'A', tag:'Find the impostor', top:0,
+   desc:'Play with 4–15 players and work together to prep your spaceship — but beware of the impostor.'},
+  {id:'ludo', n:'Ludo King', dev:'Gametion', cat:'Games', type:'game', play:'com.ludo.king', ios:'993090598', r:4.2, dl:'500M+', sz:'90 MB', age:'3+', c:['#4cc9f0','#7209b7'], g:'L', tag:'The classic board game', top:0,
+   desc:'The timeless dice game, with online multiplayer, pass-and-play and a vs-computer mode.'},
+  {id:'templerun', n:'Temple Run 2', dev:'Imangi Studios', cat:'Games', type:'game', play:'com.imangi.templerun2', ios:'572395608', r:4.3, dl:'500M+', sz:'130 MB', age:'9+', c:['#d9822b','#5b3a1a'], g:'T', tag:'Run for your life', top:0,
+   desc:'Navigate perilous cliffs, zip lines, mines and forests as you try to escape with the cursed idol.'}
+];
+var CATS = ['All','Social','Entertainment','Productivity','Finance','Shopping','Food','Travel','Education','Games'];
+
+/* ---------- helpers ---------- */
+var $ = function(s,r){return (r||document).querySelector(s)};
+var byId = {}; APPS.forEach(function(a){byId[a.id]=a});
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function grad(a){return 'linear-gradient(145deg,'+a.c.join(',')+')'}
+function icon(a,cls){return '<span class="ic '+(cls||'')+'" style="background:'+grad(a)+'" aria-hidden="true">'+esc(a.g)+'</span>'}
+var STAR='<svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.3l-6.2 3.7 1.6-7L2 9.2l7.2-.6L12 2l2.8 6.6 7.2.6-5.4 4.8 1.6 7z"/></svg>';
+function playUrl(a){return 'https://play.google.com/store/apps/details?id='+encodeURIComponent(a.play)}
+function iosUrl(a){return 'https://apps.apple.com/app/id'+encodeURIComponent(a.ios)}
+
+/* device detection → decides where the GET button sends the user */
+var UA = navigator.userAgent||'';
+var OS = /android/i.test(UA) ? 'android'
+       : (/iPad|iPhone|iPod/.test(UA) || (/Macintosh/.test(UA) && navigator.maxTouchPoints>1)) ? 'ios' : 'desktop';
+
+function toast(m){var t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(function(){t.classList.remove('show')},2200)}
+
+/* GET button: phones go straight to their own store; desktop opens the chooser */
+function getApp(id){
+  var a=byId[id]; if(!a) return;
+  if(OS==='android'){ toast('Opening Google Play…'); location.href=playUrl(a); }
+  else if(OS==='ios'){ toast('Opening App Store…'); location.href=iosUrl(a); }
+  else openSheet(id);
+}
+
+/* ---------- renderers ---------- */
+function row(a,rank){
+  return '<div class="row" data-open="'+a.id+'" role="button" tabindex="0">'+
+    (rank?'<span class="rank">'+rank+'</span>':'')+icon(a)+
+    '<span class="meta"><b>'+esc(a.n)+'</b><small>'+esc(a.tag)+'</small></span>'+
+    '<button class="getbtn" data-get="'+a.id+'" aria-label="Get '+esc(a.n)+'">Get</button></div>';
+}
+function columns(list){
+  var out='',i,j;
+  for(i=0;i<list.length;i+=3){
+    out+='<div class="col">';
+    for(j=i;j<Math.min(i+3,list.length);j++) out+=row(list[j],j+1);
+    out+='</div>';
   }
+  return out;
+}
+function renderHome(){
+  var feat=[
+    {id:'duolingo',eye:'App of the day',t:'Learn a new language, one tiny lesson at a time',c:['#58cc02','#1cb0f6']},
+    {id:'minecraft',eye:'Game of the day',t:'Build whatever your imagination can reach',c:['#3a7d2c','#1d3b6e']},
+    {id:'spotify',eye:'Now trending',t:'Your soundtrack for every mood',c:['#1db954','#191414']},
+    {id:'canva',eye:'Create',t:'Design anything, even if you’re not a designer',c:['#7d2ae8','#00c4cc']}
+  ];
+  $('#hero').innerHTML=feat.map(function(f){
+    var a=byId[f.id];
+    return '<div class="slide" role="button" tabindex="0" data-open="'+a.id+'" style="background:linear-gradient(135deg,'+f.c.join(',')+')">'+
+      '<span class="glow"></span><span class="glow b"></span>'+icon(a,'big')+
+      '<div style="position:relative"><span class="eyebrow">'+f.eye+'</span><h3>'+esc(f.t)+'</h3></div>'+
+      '<div class="foot">'+icon(a)+'<span class="meta"><b>'+esc(a.n)+'</b><small>'+esc(a.cat)+'</small></span>'+
+      '<button class="getbtn" data-get="'+a.id+'">Get</button></div></div>';
+  }).join('');
 
-  // Always fetch the latest app-release.apk (bypass browser/CDN cache); saved as StudyBuddyPro.apk via the download attribute.
-  document.getElementById('install').addEventListener('click',function(){
-    this.href='app-release.apk?v='+Date.now();
-    toast('Downloading StudyBuddyPro.apk…');
+  var apps=APPS.filter(function(a){return a.type==='app'}).sort(function(a,b){return a.top-b.top});
+  $('#topApps').innerHTML=columns(apps.slice(0,9));
+  $('#gamesRail').innerHTML=APPS.filter(function(a){return a.type==='game'}).map(function(a){
+    return '<button class="tile" data-open="'+a.id+'">'+icon(a)+'<b>'+esc(a.n)+'</b><small>'+esc(a.cat)+' · '+a.r.toFixed(1)+STAR+'</small></button>';
+  }).join('');
+  var daily=apps.filter(function(a){return ['Shopping','Food','Finance','Travel'].indexOf(a.cat)>-1});
+  $('#dailyApps').innerHTML=columns(daily.slice(0,9));
+}
+
+var state={tab:'home',cat:'All',q:''};
+function renderList(){
+  var q=state.q.trim().toLowerCase();
+  var list=APPS.filter(function(a){
+    if(state.tab==='app'&&a.type!=='app')return false;
+    if(state.tab==='game'&&a.type!=='game')return false;
+    if(state.cat!=='All'&&a.cat!==state.cat)return false;
+    if(q&&(a.n+' '+a.dev+' '+a.cat+' '+a.tag).toLowerCase().indexOf(q)<0)return false;
+    return true;
   });
+  $('#listTitle').textContent=q?'Results for “'+state.q.trim()+'”':state.tab==='game'?'Games':state.tab==='app'?'Apps':'All apps & games';
+  $('#listSub').textContent=list.length+' '+(list.length===1?'result':'results');
+  $('#grid').innerHTML=list.map(function(a){return row(a)}).join('');
+  $('#empty').classList.toggle('hide',list.length>0);
+  var cats=state.tab==='game'?['All','Games']:state.tab==='app'?CATS.filter(function(c){return c!=='Games'}):CATS;
+  if(cats.indexOf(state.cat)<0) state.cat='All';
+  $('#chips').innerHTML=cats.map(function(c){return '<button class="chip" data-cat="'+c+'" aria-pressed="'+(c===state.cat)+'">'+c+'</button>'}).join('');
+}
+function render(){
+  var showList = state.tab!=='home' || state.q.trim() || state.cat!=='All';
+  $('#homeView').classList.toggle('hide',showList);
+  $('#listView').classList.toggle('hide',!showList);
+  if(showList) renderList();
+  document.querySelectorAll('[data-tab]').forEach(function(b){b.setAttribute('aria-selected',b.dataset.tab===state.tab)});
+}
+function setTab(t){state.tab=t;state.cat='All';render();window.scrollTo({top:0,behavior:'smooth'})}
 
-  // Show the real size of whatever app-release.apk is currently uploaded.
-  fetch('app-release.apk',{method:'HEAD',cache:'no-store'}).then(function(r){
-    var n=parseInt(r.headers.get('content-length'),10);
-    if(n>0) document.getElementById('size').textContent=(n/1048576).toFixed(1)+' MB';
-  }).catch(function(){});
+/* ---------- detail sheet ---------- */
+var sheet=$('#sheet');
+var PLAY_SVG='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#00d2ff" d="M3.6 2.2c-.3.2-.5.6-.5 1.1v17.4c0 .5.2.9.5 1.1l9.6-9.8z"/><path fill="#00f076" d="m16.4 8.6-3.2 3.3-9.6-9.7c.4-.2.9-.2 1.4.1z"/><path fill="#ff3a44" d="m16.4 15.4-11.4 6.3c-.5.3-1 .3-1.4.1l9.6-9.8z"/><path fill="#ffd500" d="m20.3 10.9-3.9-2.3-3.2 3.3 3.2 3.4 3.9-2.2c.8-.5.8-1.7 0-2.2z"/></svg>';
+var IOS_SVG='<svg viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#1c8bff"/><path d="M8 17.5 14.2 6.8M11 17.5h-3.8M12.6 14h5.2M10.1 9.4l1.6 2.8" stroke="#fff" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg>';
+function openSheet(id){
+  var a=byId[id]; if(!a)return;
+  $('#sheetBody').innerHTML=
+   '<div class="shead">'+icon(a)+'<div><h2>'+esc(a.n)+'</h2><div class="dev">'+esc(a.dev)+'</div><div class="sub">'+esc(a.cat)+' · '+esc(a.tag)+'</div></div></div>'+
+   '<div class="stats">'+
+     '<div class="stat"><b>'+a.r.toFixed(1)+STAR+'</b><span>Rating</span></div>'+
+     '<div class="stat"><b>'+esc(a.dl)+'</b><span>Downloads</span></div>'+
+     '<div class="stat"><b><span class="age">'+esc(a.age)+'</span></b><span>Rated for '+esc(a.age)+'</span></div>'+
+     '<div class="stat"><b>'+esc(a.sz)+'</b><span>Size</span></div></div>'+
+   '<div class="stores">'+
+     '<a class="store" href="'+playUrl(a)+'" target="_blank" rel="noopener">'+PLAY_SVG+'<span><small>Get it on</small><b>Google Play</b></span></a>'+
+     '<a class="store" href="'+iosUrl(a)+'" target="_blank" rel="noopener">'+IOS_SVG+'<span><small>Download on the</small><b>App Store</b></span></a></div>'+
+   '<h3>About this app</h3><p class="desc">'+esc(a.desc)+'</p>';
+  if(typeof sheet.showModal==='function') sheet.showModal(); else sheet.setAttribute('open','');
+}
+function closeSheet(){ if(sheet.close) sheet.close(); else sheet.removeAttribute('open'); }
+$('#sclose').addEventListener('click',closeSheet);
+sheet.addEventListener('click',function(e){ if(e.target===sheet) closeSheet(); });
 
-  var ab=document.getElementById('aboutBtn');
-  ab.addEventListener('click',function(){
-    var o=document.getElementById('about').classList.toggle('open');
-    ab.setAttribute('aria-expanded',o);
-  });
+/* ---------- events ---------- */
+document.addEventListener('click',function(e){
+  var g=e.target.closest('[data-get]');
+  if(g){ e.stopPropagation(); getApp(g.dataset.get); return; }
+  var o=e.target.closest('[data-open]');
+  if(o){ openSheet(o.dataset.open); return; }
+  var c=e.target.closest('[data-cat]');
+  if(c){ state.cat=c.dataset.cat; render(); return; }
+  var t=e.target.closest('[data-tab]');
+  if(t){ setTab(t.dataset.tab); return; }
+  var go=e.target.closest('[data-go]');
+  if(go){ setTab(go.dataset.go); }
+});
+document.addEventListener('keydown',function(e){
+  if((e.key==='Enter'||e.key===' ')&&e.target.matches('[data-open]')){e.preventDefault();openSheet(e.target.dataset.open)}
+});
+var qi=$('#q');
+qi.addEventListener('input',function(){state.q=qi.value;$('#searchBox').classList.toggle('has',!!qi.value);render()});
+$('#clear').addEventListener('click',function(){qi.value='';state.q='';$('#searchBox').classList.remove('has');render();qi.focus()});
+$('#home').addEventListener('click',function(e){e.preventDefault();qi.value='';state.q='';$('#searchBox').classList.remove('has');setTab('home')});
+$('#bsearch').addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});qi.focus()});
+$('#sbz').addEventListener('click',function(){this.href='app-release.apk?v='+Date.now();toast('Downloading StudyBuddyPro.apk…')});
+
+renderHome(); render();
 </script>
 </body>
 </html>

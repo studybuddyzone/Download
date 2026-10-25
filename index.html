@@ -539,7 +539,7 @@ async function showAuth(u){
     try{
       const r = await api('register', 'POST', {});
       if(r.isNew) toastMsg('Welcome, ' + ((u.displayName || '').split(' ')[0] || 'friend') + '!');
-    }catch(e){ console.error(e); }
+    }catch(e){ console.error(e); toastMsg('Server error: ' + (e.code || e.message) + ' (check Vercel env + Redeploy)'); }
   }
   loadReviews();
 }
@@ -556,7 +556,7 @@ async function login(){
       try{ await signInWithRedirect(auth, provider); return; }catch(_){}
     }
     if(e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request'){
-      toastMsg(e.code === 'auth/unauthorized-domain' ? 'Add this website to Firebase → Authorized domains' : 'Sign-in failed. Try again.');
+      toastMsg(e.code === 'auth/unauthorized-domain' ? 'Add this website to Firebase → Authorized domains' : e.code === 'auth/operation-not-allowed' ? 'Enable Google in Firebase → Authentication → Sign-in method' : 'Sign-in failed: ' + (e.code || e.message));
       console.error(e);
     }
   }

@@ -130,6 +130,53 @@
   .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,16px);background:#303030;color:#fff;font-size:13.5px;
     padding:10px 18px;border-radius:8px;opacity:0;pointer-events:none;transition:.25s;z-index:10;max-width:90vw;text-align:center}
   .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  /* ===== auth + reviews ===== */
+  .bar .me{position:relative}
+  .avbtn{width:36px;height:36px;border-radius:50%;border:0;padding:0;cursor:pointer;background:var(--chip);overflow:hidden;display:grid;place-items:center;font-weight:500;color:var(--ink);font-size:15px}
+  .avbtn img{width:100%;height:100%;object-fit:cover;display:block}
+  .menu{position:absolute;right:0;top:44px;width:250px;background:#fff;border-radius:16px;padding:14px;z-index:20;
+    box-shadow:0 8px 30px rgba(0,0,0,.22),0 0 0 1px rgba(0,0,0,.06);display:none}
+  .menu.open{display:block}
+  .menu .nm{font-size:15px;font-weight:500;overflow-wrap:anywhere}
+  .menu .em{font-size:12.5px;color:var(--soft);overflow-wrap:anywhere;margin-top:2px}
+  .menu button{margin-top:12px;width:100%;height:40px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink);font-size:14px;font-weight:500;cursor:pointer}
+  .menu button:hover{background:var(--chip)}
+  .hide{display:none!important}
+  .gbtn{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;height:48px;border-radius:999px;border:1px solid #dadce0;
+    background:#fff;color:#3c4043;font-size:15px;font-weight:500;cursor:pointer;font-family:inherit}
+  .gbtn:hover{background:#f8f9fa;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+  .gbtn svg{width:20px;height:20px}
+  .gbtn[disabled]{opacity:.6;cursor:wait}
+  .hello{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--soft);justify-content:center;margin:0 0 10px}
+  .hello b{color:var(--ink);font-weight:500}
+
+  .rv-form{border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px}
+  .rv-form h3{margin:0 0 10px;font-size:15px;font-weight:500}
+  .stars{display:flex;gap:2px;margin-bottom:10px}
+  .stars button{border:0;background:none;padding:2px;cursor:pointer;color:#c4c7c5;line-height:0}
+  .stars button svg{width:34px;height:34px;fill:currentColor}
+  .stars button.on{color:#f5a623}
+  .rv-form textarea{width:100%;min-height:84px;resize:vertical;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font:inherit;font-size:14px;color:var(--ink)}
+  .rv-form textarea:focus{outline:2px solid #7cacf8;border-color:transparent}
+  .rv-row{display:flex;gap:10px;align-items:center;margin-top:10px}
+  .rv-row .cnt{font-size:12px;color:var(--soft);flex:1}
+  .rv-btn{height:40px;padding:0 22px;border-radius:999px;border:0;background:var(--green);color:#fff;font-size:14px;font-weight:500;cursor:pointer}
+  .rv-btn[disabled]{opacity:.55;cursor:wait}
+  .rv-del{height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:#fff;color:#b3261e;font-size:14px;cursor:pointer}
+  .rv-login{border:1px dashed var(--line);border-radius:14px;padding:16px;margin-bottom:16px;text-align:center;font-size:14px;color:var(--soft)}
+  .rv-sum{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--soft);margin-bottom:14px}
+  .rv-sum b{font-size:22px;color:var(--ink);font-weight:500}
+  .rv{padding:14px 0;border-top:1px solid var(--line)}
+  .rv:first-child{border-top:0}
+  .rv .top{display:flex;align-items:center;gap:10px}
+  .rv .pic{width:34px;height:34px;border-radius:50%;background:var(--chip);overflow:hidden;display:grid;place-items:center;font-size:14px;font-weight:500;flex:none}
+  .rv .pic img{width:100%;height:100%;object-fit:cover}
+  .rv .who{font-size:14px;font-weight:500;overflow-wrap:anywhere}
+  .rv .meta{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:12px;color:var(--soft)}
+  .rv .st{color:#f5a623;letter-spacing:1px;font-size:13px}
+  .rv p{margin:6px 0 0;font-size:14px;color:#3c4043;white-space:pre-wrap;overflow-wrap:anywhere}
+  .rv-empty{color:var(--soft);font-size:14px;padding:6px 0}
   :focus-visible{outline:3px solid #7cacf8;outline-offset:2px}
   @media (min-width:700px){ .shots img{height:380px} }
 </style>
@@ -139,6 +186,14 @@
 
   <div class="bar"><img src="logo.svg" alt=""><span>Infinity Store</span><span class="sp"></span>
     <button class="sbtn" type="button" id="searchBtn" aria-label="Search"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10.5 3a7.5 7.5 0 0 1 5.9 12.1l4.3 4.3-1.4 1.4-4.3-4.3A7.5 7.5 0 1 1 10.5 3zm0 2a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11z"/></svg></button>
+    <div class="me hide" id="me">
+      <button class="avbtn" id="avBtn" type="button" aria-label="Profile" aria-haspopup="true"></button>
+      <div class="menu" id="menu">
+        <div class="nm" id="mName"></div>
+        <div class="em" id="mMail"></div>
+        <button type="button" id="outBtn">Sign out</button>
+      </div>
+    </div>
   </div>
 
   <div class="head">
@@ -166,8 +221,21 @@
   </div>
 
   <!-- The file on the server is app-release.apk; the user saves it as StudyBuddyPro.apk -->
-  <a class="install" id="install" href="app-release.apk" download="StudyBuddyPro.apk">Install</a>
-  <p class="note">Android 7.0 and up · Free</p>
+  <div id="authBox" class="hide">
+    <!-- logged out: Google sign-in -->
+    <div id="outView">
+      <button class="gbtn" id="gBtn" type="button">
+        <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.4-4.1 7-10.1 7-17.6z"/><path fill="#FBBC05" d="M10.5 28.7A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.2.8-4.7l-7.9-6.1A24 24 0 0 0 0 24c0 3.9.9 7.5 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>
+        <span>Sign in with Google</span>
+      </button>
+      <p class="note">Sign in to download the app · Free</p>
+    </div>
+    <!-- logged in: Install -->
+    <div id="inView" class="hide">
+      <a class="install" id="install" href="app-release.apk" download="StudyBuddyPro.apk">Install</a>
+      <p class="note">Android 7.0 and up · Free</p>
+    </div>
+  </div>
 
   <div class="shots" aria-label="App screenshots">
     <a href="screenshots/01-home.jpg" target="_blank" rel="noopener"><img src="screenshots/01-home.jpg" alt="Home screen" loading="lazy"></a>
@@ -213,6 +281,27 @@
         <div class="br"><span>1</span><div><i style="width:8%"></i></div></div>
       </div>
     </div>
+  </section>
+
+
+  <section id="reviews">
+    <div class="sh"><h2>Reviews</h2></div>
+    <div class="rv-sum hide" id="rvSum"></div>
+
+    <div class="rv-login" id="rvLogin">Sign in with Google to write a review.</div>
+
+    <div class="rv-form hide" id="rvForm">
+      <h3 id="rvTitle">Rate this app</h3>
+      <div class="stars" id="stars" role="radiogroup" aria-label="Your rating"></div>
+      <textarea id="rvText" maxlength="500" placeholder="Share your experience (optional)"></textarea>
+      <div class="rv-row">
+        <span class="cnt" id="rvCnt">0/500</span>
+        <button type="button" class="rv-del hide" id="rvDel">Delete</button>
+        <button type="button" class="rv-btn" id="rvSend">Submit</button>
+      </div>
+    </div>
+
+    <div id="rvList"><div class="rv-empty">Loading reviews…</div></div>
   </section>
 
   <section>
@@ -354,7 +443,7 @@ function playUrl(a){return 'https://play.google.com/store/apps/details?id='+enco
 function iosUrl(a){return 'https://apps.apple.com/app/id'+encodeURIComponent(a.ios)}
 var UA=navigator.userAgent||'';
 var OS=/android/i.test(UA)?'android':(/iPad|iPhone|iPod/.test(UA)||(/Macintosh/.test(UA)&&navigator.maxTouchPoints>1))?'ios':'desktop';
-var tt;function toast(m){var t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('show')},2200)}
+var tt;window.toast=toast;function toast(m){var t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('show')},2200)}
 
 /* tapping a suggested app: Android → Google Play, iPhone/iPad → App Store, desktop → pick a store */
 function openApp(id){
@@ -383,7 +472,7 @@ $('#dlg').addEventListener('click',function(e){if(e.target===this)this.close()})
 $('#searchBtn').addEventListener('click',function(){document.getElementById('sugg').scrollIntoView({behavior:'smooth'})});
 
 // Always fetch the latest app-release.apk (bypass cache); saved as StudyBuddyPro.apk via the download attribute.
-$('#install').addEventListener('click',function(){this.href='app-release.apk?v='+Date.now();toast('Downloading StudyBuddyPro.apk…')});
+
 // Show the real size of whatever app-release.apk is currently uploaded.
 fetch('app-release.apk',{method:'HEAD',cache:'no-store'}).then(function(r){
   var n=parseInt(r.headers.get('content-length'),10);
@@ -391,6 +480,174 @@ fetch('app-release.apk',{method:'HEAD',cache:'no-store'}).then(function(r){
 }).catch(function(){});
 var ab=$('#aboutBtn');
 ab.addEventListener('click',function(){var o=document.getElementById('about').classList.toggle('open');ab.setAttribute('aria-expanded',o)});
+</script>
+
+<script type="module">
+/* =====================================================================
+   1) Firebase config (only used for Google sign-in) — same project as StudyBuddyPro
+   2) API_BASE = your Vercel backend URL (the one that has api/store.js)
+   ===================================================================== */
+const firebaseConfig = {
+  apiKey: "PASTE_API_KEY",
+  authDomain: "PASTE_PROJECT_ID.firebaseapp.com",
+  projectId: "PASTE_PROJECT_ID",
+  appId: "PASTE_APP_ID"
+};
+const API_BASE = "https://PASTE-YOUR-BACKEND.vercel.app";
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const toastMsg = m => (window.toast ? window.toast(m) : alert(m));
+const configured = !String(firebaseConfig.apiKey).startsWith("PASTE") && !API_BASE.includes("PASTE");
+
+let auth, user = null, myRating = 0, hasReview = false;
+const STAR_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.3l-6.2 3.7 1.6-7L2 9.2l7.2-.6L12 2l2.8 6.6 7.2.6-5.4 4.8 1.6 7z"/></svg>';
+
+/* ---------- backend call (every data operation goes through here) ---------- */
+async function api(action, method, body){
+  const headers = {};
+  if(body) headers['Content-Type'] = 'application/json';
+  if(user) headers['Authorization'] = 'Bearer ' + await user.getIdToken();
+  const r = await fetch(API_BASE + '/api/store?action=' + action, { method, headers, body: body ? JSON.stringify(body) : undefined });
+  const j = await r.json().catch(() => ({}));
+  if(!r.ok) throw Object.assign(new Error(j.error || 'request_failed'), { status: r.status, code: j.error });
+  return j;
+}
+
+function avatarHTML(photo, name){
+  return photo ? '<img src="'+esc(photo)+'" alt="" referrerpolicy="no-referrer" onerror="this.remove()">' : esc((name||'?').trim().charAt(0).toUpperCase());
+}
+
+/* ---------- auth UI ---------- */
+async function showAuth(u){
+  user = u;
+  $('#authBox').classList.remove('hide');
+  $('#outView').classList.toggle('hide', !!u);
+  $('#inView').classList.toggle('hide', !u);
+  $('#me').classList.toggle('hide', !u);
+  $('#rvLogin').classList.toggle('hide', !!u);
+  $('#rvForm').classList.add('hide');
+  if(u){
+    $('#avBtn').innerHTML = avatarHTML(u.photoURL, u.displayName || u.email);
+    $('#mName').textContent = u.displayName || 'Signed in';
+    $('#mMail').textContent = u.email || '';
+    // backend registers the user (new -> creates record, returning -> updates last login)
+    try{
+      const r = await api('register', 'POST', {});
+      if(r.isNew) toastMsg('Welcome, ' + ((u.displayName || '').split(' ')[0] || 'friend') + '!');
+    }catch(e){ console.error(e); }
+  }
+  loadReviews();
+}
+
+async function login(){
+  if(!configured){ toastMsg('Set firebaseConfig and API_BASE in index.html'); return; }
+  const b = $('#gBtn'); b.disabled = true;
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: 'select_account' });
+  try{
+    await signInWithPopup(auth, provider);
+  }catch(e){
+    if(e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment'){
+      try{ await signInWithRedirect(auth, provider); return; }catch(_){}
+    }
+    if(e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request'){
+      toastMsg(e.code === 'auth/unauthorized-domain' ? 'Add this website to Firebase → Authorized domains' : 'Sign-in failed. Try again.');
+      console.error(e);
+    }
+  }
+  b.disabled = false;
+}
+
+if(configured){
+  auth = getAuth(initializeApp(firebaseConfig));
+  getRedirectResult(auth).catch(()=>{});
+  onAuthStateChanged(auth, showAuth);
+}else{
+  showAuth(null);
+}
+$('#gBtn').addEventListener('click', login);
+$('#outBtn').addEventListener('click', async () => { $('#menu').classList.remove('open'); try{ await signOut(auth); }catch(e){} });
+$('#avBtn').addEventListener('click', e => { e.stopPropagation(); $('#menu').classList.toggle('open'); });
+document.addEventListener('click', e => { if(!e.target.closest('#me')) $('#menu').classList.remove('open'); });
+
+/* ---------- download (backend logs it and returns the APK link) ---------- */
+$('#install').addEventListener('click', async e => {
+  e.preventDefault();
+  if(!user){ toastMsg('Please sign in first'); return; }
+  toastMsg('Preparing download…');
+  try{
+    const r = await api('download', 'POST', {});
+    const a = document.createElement('a');
+    a.href = r.url || ('app-release.apk?v=' + Date.now());
+    a.download = 'StudyBuddyPro.apk';
+    document.body.appendChild(a); a.click(); a.remove();
+  }catch(err){ console.error(err); toastMsg('Download failed. Try again.'); }
+});
+
+/* ---------- star picker ---------- */
+function paintStars(){
+  $('#stars').innerHTML = [1,2,3,4,5].map(n =>
+    '<button type="button" role="radio" aria-checked="'+(n===myRating)+'" aria-label="'+n+' star" data-n="'+n+'" class="'+(n<=myRating?'on':'')+'">'+STAR_SVG+'</button>').join('');
+}
+$('#stars').addEventListener('click', e => { const b = e.target.closest('button'); if(b){ myRating = +b.dataset.n; paintStars(); } });
+$('#rvText').addEventListener('input', e => { $('#rvCnt').textContent = e.target.value.length + '/500'; });
+
+function fillForm(mine){
+  hasReview = !!mine; myRating = mine ? mine.rating : 0;
+  $('#rvText').value = mine ? mine.text : '';
+  $('#rvCnt').textContent = $('#rvText').value.length + '/500';
+  $('#rvTitle').textContent = hasReview ? 'Your review' : 'Rate this app';
+  $('#rvSend').textContent = hasReview ? 'Update' : 'Submit';
+  $('#rvDel').classList.toggle('hide', !hasReview);
+  $('#rvForm').classList.remove('hide');
+  paintStars();
+}
+
+$('#rvSend').addEventListener('click', async () => {
+  if(!user) return;
+  if(myRating < 1){ toastMsg('Please select a star rating'); return; }
+  const b = $('#rvSend'); b.disabled = true;
+  try{
+    await api('review', 'POST', { rating: myRating, text: $('#rvText').value });
+    toastMsg(hasReview ? 'Review updated' : 'Thanks for your review!');
+    await loadReviews();
+  }catch(e){ console.error(e); toastMsg(e.code === 'slow_down' ? 'Please wait a few seconds' : 'Could not save review'); }
+  b.disabled = false;
+});
+
+$('#rvDel').addEventListener('click', async () => {
+  if(!user || !confirm('Delete your review?')) return;
+  try{ await api('delete', 'POST', {}); toastMsg('Review deleted'); await loadReviews(); }
+  catch(e){ console.error(e); toastMsg('Could not delete review'); }
+});
+
+/* ---------- reviews list (from backend) ---------- */
+async function loadReviews(){
+  if(!configured){ $('#rvList').innerHTML = '<div class="rv-empty">Reviews will appear here.</div>'; return; }
+  try{
+    const d = await api('reviews', 'GET');
+    if(user) fillForm(d.mine);
+    const list = $('#rvList'), sum = $('#rvSum');
+    if(!d.reviews.length){ list.innerHTML = '<div class="rv-empty">No reviews yet. Be the first!</div>'; sum.classList.add('hide'); return; }
+    list.innerHTML = d.reviews.map(x => {
+      const r = Math.max(1, Math.min(5, x.rating|0));
+      const date = x.at ? new Date(x.at).toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'}) : '';
+      return '<div class="rv"><div class="top"><span class="pic">'+avatarHTML(x.photo, x.name)+'</span><span class="who">'+esc(x.name)+'</span></div>'+
+        '<div class="meta"><span class="st">'+'★'.repeat(r)+'<span style="color:#c4c7c5">'+'★'.repeat(5-r)+'</span></span><span>'+esc(date)+'</span></div>'+
+        (x.text ? '<p>'+esc(x.text)+'</p>' : '')+'</div>';
+    }).join('');
+    sum.innerHTML = '<b>'+d.avg.toFixed(1)+'</b><span>from '+d.count+' review'+(d.count>1?'s':'')+'</span>';
+    sum.classList.remove('hide');
+  }catch(e){
+    console.error(e);
+    $('#rvList').innerHTML = '<div class="rv-empty">Reviews are unavailable right now.</div>';
+  }
+}
 </script>
 </body>
 </html>

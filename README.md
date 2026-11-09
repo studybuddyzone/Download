@@ -9,5 +9,11 @@ Open `index.html` and edit the `APPS` array. For each app set:
 
 The **Get** button sends Android phones to Google Play, iPhones/iPads to the App Store, and opens a chooser (both stores) on desktop.
 
-## StudyBuddyZone (direct APK)
-Replace `app-release.apk` with a new build (same name). Users download it as `StudyBuddyPro.apk`.
+## First-party apps (direct APK)
+The page for each app lives at `?app=<id>` (no param = **StudyBuddyPro**, the default).
+- **StudyBuddyPro** (`pro`): `studybuddypro.apk` -> saved as `StudyBuddyPro.apk`. Icon `icon-pro.png`, screenshots in `screenshots-pro/`.
+- **StudyBuddyZone** (`zone`): `app-release.apk` -> saved as `StudyBuddyZone.apk`.
+
+Edit text/screenshots in the `PAGES` object in `index.html`. Each app has its own reviews
+(`reviews_pro` / `reviews` collections) — **redeploy `api/store.js` to Vercel** after updating.
+Optional env vars for hosting the APK elsewhere: `APK_URL_PRO` / `APK_STORAGE_PATH_PRO` (Pro), `APK_URL` / `APK_STORAGE_PATH` (Zone).

@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#ffffff">
-<title>StudyBuddyZone – Infinity Store</title>
-<link rel="icon" href="icon.png">
+<title>StudyBuddyPro – Infinity Store</title>
+<link rel="icon" href="icon-pro.png" id="favicon">
 <style>
   :root{
     --bg:#ffffff; --ink:#1f1f1f; --soft:#5f6368; --line:#e3e3e3;
@@ -30,6 +30,8 @@
   .icon{width:68px;height:68px;border-radius:16px;flex:none;background:#fff;padding:7px;
     box-shadow:0 1px 3px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.05)}
   .icon img{width:100%;height:100%;object-fit:contain;display:block}
+  .icon.full{padding:0;background:#000;overflow:hidden}
+  .icon.full img{object-fit:cover;transform:scale(1.08)}
   h1{font-size:24px;line-height:1.2;font-weight:500;margin:2px 0 6px;letter-spacing:-.2px}
   .dev{color:var(--green);font-weight:500;font-size:15px;text-decoration:none}
   .sub{color:var(--soft);font-size:13px;margin-top:2px}
@@ -56,7 +58,7 @@
     scroll-snap-type:x proximity;scrollbar-width:none}
   .shots::-webkit-scrollbar{display:none}
   .shots a{flex:none;scroll-snap-align:start;display:block}
-  .shots img{display:block;height:300px;width:auto;aspect-ratio:771/1536;border-radius:14px;background:#eee;
+  .shots img{display:block;height:300px;width:auto;aspect-ratio:var(--ar,771/1536);border-radius:14px;background:#eee;
     box-shadow:0 1px 4px rgba(0,0,0,.2)}
 
   /* sections */
@@ -197,27 +199,27 @@
   </div>
 
   <div class="head">
-    <div class="icon"><img src="icon.png" alt="StudyBuddyZone app icon"></div>
+    <div class="icon full" id="appIcon"><img src="icon-pro.png" alt="StudyBuddyPro app icon"></div>
     <div>
-      <h1>StudyBuddyZone</h1>
-      <a class="dev" href="#about">Xevrontech</a>
-      <div class="sub">Education · Engineering notes &amp; PYQs</div>
+      <h1 id="appName">StudyBuddyPro</h1>
+      <a class="dev" href="#about" id="appDev">Xevrontech</a>
+      <div class="sub" id="appSub">Education · DBATU B.Tech notes, PYQs &amp; question bank</div>
     </div>
   </div>
 
   <div class="stats">
     <div class="stat">
-      <b>4.0
+      <b><span id="stRate">–</span>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.3l-6.2 3.7 1.6-7L2 9.2l7.2-.6L12 2l2.8 6.6 7.2.6-5.4 4.8 1.6 7z"/></svg>
       </b>
       <span>Rating</span>
     </div>
-    <div class="stat"><b>5K+</b><span>Downloads</span></div>
+    <div class="stat"><b id="stDl">New</b><span>Downloads</span></div>
     <div class="stat">
-      <b><span class="age">18+</span></b>
-      <span>Rated for 18+</span>
+      <b><span class="age" id="stAge">18+</span></b>
+      <span id="stAgeL">Rated for 18+</span>
     </div>
-    <div class="stat"><b id="size">~10 MB</b><span>Size</span></div>
+    <div class="stat"><b id="size">40 MB</b><span>Size</span></div>
   </div>
 
   <!-- The file on the server is app-release.apk; the user saves it as StudyBuddyPro.apk -->
@@ -232,22 +234,12 @@
     </div>
     <!-- logged in: Install -->
     <div id="inView" class="hide">
-      <a class="install" id="install" href="app-release.apk" download="StudyBuddyPro.apk">Install</a>
+      <a class="install" id="install" href="studybuddypro.apk" download="StudyBuddyPro.apk">Install</a>
       <p class="note">Android 7.0 and up · Free</p>
     </div>
   </div>
 
-  <div class="shots" aria-label="App screenshots">
-    <a href="screenshots/01-home.jpg" target="_blank" rel="noopener"><img src="screenshots/01-home.jpg" alt="Home screen" loading="lazy"></a>
-    <a href="screenshots/02-branch.jpg" target="_blank" rel="noopener"><img src="screenshots/02-branch.jpg" alt="Branch and subjects" loading="lazy"></a>
-    <a href="screenshots/03-profile.jpg" target="_blank" rel="noopener"><img src="screenshots/03-profile.jpg" alt="Profile" loading="lazy"></a>
-    <a href="screenshots/04-menu.jpg" target="_blank" rel="noopener"><img src="screenshots/04-menu.jpg" alt="Navigation menu" loading="lazy"></a>
-    <a href="screenshots/05-premium.jpg" target="_blank" rel="noopener"><img src="screenshots/05-premium.jpg" alt="Premium" loading="lazy"></a>
-    <a href="screenshots/06-subject.jpg" target="_blank" rel="noopener"><img src="screenshots/06-subject.jpg" alt="Study resources" loading="lazy"></a>
-    <a href="screenshots/07-question-bank.jpg" target="_blank" rel="noopener"><img src="screenshots/07-question-bank.jpg" alt="Question bank" loading="lazy"></a>
-    <a href="screenshots/08-academic-materials.jpg" target="_blank" rel="noopener"><img src="screenshots/08-academic-materials.jpg" alt="Academic materials" loading="lazy"></a>
-    <a href="screenshots/09-premium-lock.jpg" target="_blank" rel="noopener"><img src="screenshots/09-premium-lock.jpg" alt="Premium content" loading="lazy"></a>
-  </div>
+  <div class="shots" id="shots" aria-label="App screenshots"></div>
 
   <section class="about" id="about">
     <div class="sh">
@@ -256,12 +248,9 @@
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.6 16.6 13.2 12 8.6 7.4 10 6l6 6-6 6z"/></svg>
       </button>
     </div>
-    <p>Notes, PYQs and answer keys for engineering students — organised by branch and semester, ready the night before the exam.</p>
-    <p class="more">Pick your branch, choose your year and open subject-wise study resources, question banks and academic materials in one place. Premium subjects unlock extra content.</p>
-    <div class="chips">
-      <span class="chip">Mechanical</span><span class="chip">Civil</span><span class="chip">Electrical</span>
-      <span class="chip">ENTC</span><span class="chip">Computer</span><span class="chip">FY / SY / TY</span>
-    </div>
+    <p id="aboutP1"></p>
+    <p class="more" id="aboutP2"></p>
+    <div class="chips" id="chips"></div>
   </section>
 
   <section>
@@ -272,14 +261,8 @@
   <section>
     <div class="sh"><h2>Ratings</h2></div>
     <div class="rate">
-      <div><div class="big">4.0</div><div class="sm">5K+ downloads</div></div>
-      <div class="bars">
-        <div class="br"><span>5</span><div><i style="width:55%"></i></div></div>
-        <div class="br"><span>4</span><div><i style="width:22%"></i></div></div>
-        <div class="br"><span>3</span><div><i style="width:10%"></i></div></div>
-        <div class="br"><span>2</span><div><i style="width:5%"></i></div></div>
-        <div class="br"><span>1</span><div><i style="width:8%"></i></div></div>
-      </div>
+      <div><div class="big" id="rBig">–</div><div class="sm" id="rSm"></div></div>
+      <div class="bars" id="rBars"></div>
     </div>
   </section>
 
@@ -309,16 +292,11 @@
       <summary>How to install
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.6 16.6 13.2 12 8.6 7.4 10 6l6 6-6 6z"/></svg>
       </summary>
-      <ol>
-        <li><b>Tap “Install”.</b> StudyBuddyPro.apk saves to your Downloads folder.</li>
-        <li><b>Allow this source.</b> On the one-time prompt, tap Settings and switch on “Allow from this source” for your browser.</li>
-        <li><b>Open the file and tap Install.</b> If Play Protect shows a caution screen, that’s normal for apps installed outside the Play Store.</li>
-        <li><b>Open StudyBuddyZone</b> and start studying.</li>
-      </ol>
+      <ol id="steps"></ol>
     </details>
   </section>
 
-  <section>
+  <section id="alsoBox" class="hide">
     <a class="also" href="https://apps.microsoft.com/detail/9ndnjtwlpxcv?ocid=webpdpshare" target="_blank" rel="noopener">
       <svg viewBox="0 0 23 23" aria-hidden="true">
         <rect x="1" y="1" width="9.6" height="9.6" fill="#F25022"/><rect x="12.4" y="1" width="9.6" height="9.6" fill="#7FBA00"/>
@@ -339,7 +317,7 @@
   </section>
 
   <footer>
-    <span>&copy; 2026 Infinity Store &middot; StudyBuddyZone by Xevrontech</span>
+    <span id="foot">&copy; 2026 Infinity Store &middot; StudyBuddyPro by Xevrontech</span>
     <span><a href="privacy-policy.html">Privacy Policy</a> &middot; <a href="terms-conditions.html">Terms</a></span>
   </footer>
 </div>
@@ -354,8 +332,9 @@
 
 <script>
 var APPS = [
-  {id:'studybuddy', n:'StudyBuddyZone', dev:'Xevrontech', cat:'Education', type:'app', apk:'app-release.apk', img:'icon.png', r:4.0, dl:'5K+', sz:'~10 MB', age:'18+', c:['#0fb89a','#1565c0'], g:'S', tag:'Engineering notes & PYQs', top:0,
-   desc:'Notes, PYQs and answer keys for engineering students — organised by branch and semester, ready the night before the exam. Pick your branch, choose your year and open subject-wise study resources, question banks and academic materials in one place. Android only; downloads directly as an APK.'},
+  // first-party apps: each has its own page inside the store (?app=<id>); the first one listed here is the default page
+  {id:'pro', n:'StudyBuddyPro', dev:'Xevrontech', cat:'Education', type:'app', page:1, img:'icon-pro.png', r:0, c:['#e50914','#7a0309'], g:'P'},
+  {id:'zone', n:'StudyBuddyZone', dev:'Xevrontech', cat:'Education', type:'app', page:1, img:'icon.png', r:4.0, c:['#0fb89a','#1565c0'], g:'S'},
   // ---- apps ----
   {id:'whatsapp', n:'WhatsApp Messenger', dev:'WhatsApp LLC', cat:'Social', type:'app', play:'com.whatsapp', ios:'310633997', r:4.3, dl:'5B+', sz:'60 MB', age:'12+', c:['#25d366','#128c7e'], g:'W', tag:'Simple, reliable, private messaging', top:1,
    desc:'Message and call friends and family for free, anywhere. Share photos, videos, documents and your location, create group chats and stay in touch with end-to-end encryption.'},
@@ -416,12 +395,64 @@ var $=function(s){return document.querySelector(s)};
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 var byId={};APPS.forEach(function(a){byId[a.id]=a});
 var STAR='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.3l-6.2 3.7 1.6-7L2 9.2l7.2-.6L12 2l2.8 6.6 7.2.6-5.4 4.8 1.6 7z"/></svg>';
+
+var STEPS=function(f,n){return [
+  '<b>Tap “Install”.</b> '+f+' saves to your Downloads folder.',
+  '<b>Allow this source.</b> On the one-time prompt, tap Settings and switch on “Allow from this source” for your browser.',
+  '<b>Open the file and tap Install.</b> If Play Protect shows a caution screen, that’s normal for apps installed outside the Play Store.',
+  '<b>Open '+n+'</b> and start studying.']};
+var PAGES={
+  pro:{title:'StudyBuddyPro', sub:'Education · DBATU B.Tech notes, PYQs & question bank', dl:'New', age:'18+', size:'40 MB',
+    apk:'studybuddypro.apk', file:'StudyBuddyPro.apk', full:1, dynRating:1, ar:'720/1605',
+    shots:[['01-home','Home'],['02-subjects','First year subjects'],['03-smail','S-Mail notices'],['04-premium-lock','Premium notes'],['05-plans','Premium plans'],['06-checkout','Checkout'],['07-login','Login']].map(function(x){return ['screenshots-pro/'+x[0]+'.jpg',x[1]]}),
+    p1:'Your DBATU B.Tech academic portal for First and Second Year — notes, previous year question papers and a question bank, organised subject by subject.',
+    p2:'Practise with Solo MCQ and challenge friends in Battle Arena, read handwritten and typed notes, check PYQs and the Answer Bank, and get exam notices and timetables in S-Mail. Premium plans (Silver, Gold, Diamond) unlock more subjects and study material.',
+    chips:['DBATU B.Tech','FY & SY','Notes','PYQs','Question Bank','Answer Bank','Solo MCQ','Battle Arena','S-Mail'],
+    foot:'StudyBuddyPro by Xevrontech'},
+  zone:{title:'StudyBuddyZone', sub:'Education · Engineering notes & PYQs', rate:'4.0', dl:'5K+', age:'18+', size:'~10 MB', liveSize:1,
+    apk:'app-release.apk', file:'StudyBuddyZone.apk', ar:'771/1536', bars:[55,22,10,5,8], ms:1,
+    shots:[['01-home','Home screen'],['02-branch','Branch and subjects'],['03-profile','Profile'],['04-menu','Navigation menu'],['05-premium','Premium'],['06-subject','Study resources'],['07-question-bank','Question bank'],['08-academic-materials','Academic materials'],['09-premium-lock','Premium content']].map(function(x){return ['screenshots/'+x[0]+'.jpg',x[1]]}),
+    p1:'Notes, PYQs and answer keys for engineering students — organised by branch and semester, ready the night before the exam.',
+    p2:'Pick your branch, choose your year and open subject-wise study resources, question banks and academic materials in one place. Premium subjects unlock extra content.',
+    chips:['Mechanical','Civil','Electrical','ENTC','Computer','FY / SY / TY'],
+    foot:'StudyBuddyZone by Xevrontech'}
+};
+var CUR='pro';
+function qApp(){var m=/[?&]app=([a-z]+)/.exec(location.search);return m&&PAGES[m[1]]?m[1]:'pro'}
+function setApp(id,push){
+  var p=PAGES[id];if(!p)return;CUR=id;
+  if(push){try{history.pushState({},'',id==='pro'?location.pathname:location.pathname+'?app='+id)}catch(e){}}
+  document.title=p.title+' – Infinity Store';
+  $('#favicon').href=byId[id].img;
+  var ic=$('#appIcon');ic.classList.toggle('full',!!p.full);
+  ic.innerHTML='<img src="'+byId[id].img+'" alt="'+esc(p.title)+' app icon">';
+  $('#appName').textContent=p.title;$('#appSub').textContent=p.sub;
+  $('#stRate').textContent=p.rate||'–';$('#stDl').textContent=p.dl;$('#stAge').textContent=p.age;$('#stAgeL').textContent='Rated for '+p.age;
+  $('#size').textContent=p.size;
+  var ins=$('#install');ins.setAttribute('href',p.apk);ins.setAttribute('download',p.file);
+  $('#shots').style.setProperty('--ar',p.ar);$('#shots').scrollLeft=0;
+  $('#shots').innerHTML=p.shots.map(function(x){return '<a href="'+x[0]+'" target="_blank" rel="noopener"><img src="'+x[0]+'" alt="'+esc(x[1])+'" loading="lazy"></a>'}).join('');
+  $('#aboutP1').textContent=p.p1;$('#aboutP2').textContent=p.p2;
+  $('#chips').innerHTML=p.chips.map(function(c){return '<span class="chip">'+esc(c)+'</span>'}).join('');
+  $('#steps').innerHTML=STEPS(p.file,p.title).map(function(t){return '<li>'+t+'</li>'}).join('');
+  $('#alsoBox').classList.toggle('hide',!p.ms);
+  $('#foot').innerHTML='&copy; 2026 Infinity Store &middot; '+esc(p.foot);
+  paintRating(p.bars?{avg:parseFloat(p.rate),sm:p.dl+' downloads',bars:p.bars}:{avg:0,sm:'Loading…',bars:[0,0,0,0,0]});
+  if(p.liveSize){fetch(p.apk,{method:'HEAD',cache:'no-store'}).then(function(r){var n=parseInt(r.headers.get('content-length'),10);if(n>0&&CUR===id)$('#size').textContent=(n/1048576).toFixed(1)+' MB'}).catch(function(){})}
+  renderRails();
+  document.dispatchEvent(new CustomEvent('appchange'));
+}
+function paintRating(o){
+  $('#rBig').textContent=o.avg?o.avg.toFixed(1):'–';$('#rSm').textContent=o.sm;
+  $('#rBars').innerHTML=[5,4,3,2,1].map(function(n,i){return '<div class="br"><span>'+n+'</span><div><i style="width:'+o.bars[4-i]+'%"></i></div></div>'}).join('');
+}
+window.paintRating=paintRating;window.PAGES=PAGES;window.curApp=function(){return CUR};
 /* Real app icons: fetched in the visitor's browser from Apple's public lookup API (by App Store id).
    If it can't load, the coloured letter tile stays as a fallback. */
 var ICONS={};
 try{ICONS=JSON.parse(localStorage.getItem('inf_icons')||'{}')}catch(e){}
 function icon(a){
-  var u=ICONS[a.ios];
+  var u=a.img||ICONS[a.ios];
   return '<span class="ic" style="background:linear-gradient(145deg,'+a.c.join(',')+')" aria-hidden="true">'+esc(a.g)+
     (u?'<img src="'+esc(u)+'" alt="" onerror="this.remove()">':'')+'</span>';
 }
@@ -448,6 +479,7 @@ var tt;window.toast=toast;function toast(m){var t=$('#toast');t.textContent=m;t.
 /* tapping a suggested app: Android → Google Play, iPhone/iPad → App Store, desktop → pick a store */
 function openApp(id){
   var a=byId[id];if(!a)return;
+  if(a.page){setApp(id,true);return}
   if(OS==='android'){toast('Opening Google Play…');location.href=playUrl(a)}
   else if(OS==='ios'){toast('Opening App Store…');location.href=iosUrl(a)}
   else{
@@ -460,24 +492,19 @@ function openApp(id){
     $('#dlg').showModal();
   }
 }
-function card(a){return '<button class="card" data-id="'+a.id+'" type="button">'+icon(a)+'<b>'+esc(a.n)+'</b><small>'+a.r.toFixed(1)+STAR+'</small></button>'}
+function card(a){return '<button class="card" data-id="'+a.id+'" type="button">'+icon(a)+'<b>'+esc(a.n)+'</b><small>'+(a.r?a.r.toFixed(1)+STAR:'New')+'</small></button>'}
 function renderRails(){
-  $('#railApps').innerHTML=APPS.filter(function(a){return a.type==='app'&&a.id!=='studybuddy'}).map(card).join('');
+  $('#railApps').innerHTML=APPS.filter(function(a){return a.type==='app'&&a.id!==CUR}).map(card).join('');
   $('#railGames').innerHTML=APPS.filter(function(a){return a.type==='game'}).map(card).join('');
 }
-renderRails();loadIcons();
+loadIcons();
 document.addEventListener('click',function(e){var c=e.target.closest('.card');if(c)openApp(c.dataset.id)});
 $('#dClose').addEventListener('click',function(){$('#dlg').close()});
 $('#dlg').addEventListener('click',function(e){if(e.target===this)this.close()});
 $('#searchBtn').addEventListener('click',function(){document.getElementById('sugg').scrollIntoView({behavior:'smooth'})});
 
-// Always fetch the latest app-release.apk (bypass cache); saved as StudyBuddyPro.apk via the download attribute.
-
-// Show the real size of whatever app-release.apk is currently uploaded.
-fetch('app-release.apk',{method:'HEAD',cache:'no-store'}).then(function(r){
-  var n=parseInt(r.headers.get('content-length'),10);
-  if(n>0)$('#size').textContent=(n/1048576).toFixed(1)+' MB';
-}).catch(function(){});
+window.addEventListener('popstate',function(){setApp(qApp(),false)});
+setApp(qApp(),false);
 var ab=$('#aboutBtn');
 ab.addEventListener('click',function(){var o=document.getElementById('about').classList.toggle('open');ab.setAttribute('aria-expanded',o)});
 </script>
@@ -504,7 +531,7 @@ const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>'
 const toastMsg = m => (window.toast ? window.toast(m) : alert(m));
 const configured = !String(firebaseConfig.apiKey).startsWith("PASTE") && !API_BASE.includes("PASTE");
 
-let auth, user = null, myRating = 0, hasReview = false;
+let auth, user = null, myRating = 0, hasReview = false, registered = false;
 const STAR_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.3l-6.2 3.7 1.6-7L2 9.2l7.2-.6L12 2l2.8 6.6 7.2.6-5.4 4.8 1.6 7z"/></svg>';
 
 /* ---------- backend call (every data operation goes through here) ---------- */
@@ -512,7 +539,7 @@ async function api(action, method, body){
   const headers = {};
   if(body) headers['Content-Type'] = 'application/json';
   if(user) headers['Authorization'] = 'Bearer ' + await user.getIdToken();
-  const r = await fetch(API_BASE + '/api/store?action=' + action, { method, headers, body: body ? JSON.stringify(body) : undefined });
+  const r = await fetch(API_BASE + '/api/store?action=' + action + '&app=' + window.curApp(), { method, headers, body: body ? JSON.stringify(body) : undefined });
   const j = await r.json().catch(() => ({}));
   if(!r.ok) throw Object.assign(new Error(j.error || 'request_failed'), { status: r.status, code: j.error });
   return j;
@@ -524,18 +551,19 @@ function avatarHTML(photo, name){
 
 /* ---------- auth UI ---------- */
 async function showAuth(u){
-  user = u;
+  user = u; if(!u) registered = false;
   $('#authBox').classList.remove('hide');
   $('#outView').classList.toggle('hide', !!u);
   $('#inView').classList.toggle('hide', !u);
   $('#me').classList.toggle('hide', !u);
   $('#rvLogin').classList.toggle('hide', !!u);
   $('#rvForm').classList.add('hide');
-  if(u){
+  if(u && !registered){
     $('#avBtn').innerHTML = avatarHTML(u.photoURL, u.displayName || u.email);
     $('#mName').textContent = u.displayName || 'Signed in';
     $('#mMail').textContent = u.email || '';
     // backend registers the user (new -> creates record, returning -> updates last login)
+    registered = true;
     try{
       const r = await api('register', 'POST', {});
       if(r.isNew) toastMsg('Welcome, ' + ((u.displayName || '').split(' ')[0] || 'friend') + '!');
@@ -582,9 +610,11 @@ $('#install').addEventListener('click', async e => {
   toastMsg('Preparing download…');
   try{
     const r = await api('download', 'POST', {});
+    const pg = window.PAGES[window.curApp()];
     const a = document.createElement('a');
-    a.href = r.url || ('app-release.apk?v=' + Date.now());
-    a.download = 'StudyBuddyPro.apk';
+    // only trust the backend link if it answered for this app (an old, un-redeployed backend would return the wrong APK)
+    a.href = (r.app === window.curApp() && r.url) ? r.url : (pg.apk + '?v=' + Date.now());
+    a.download = pg.file;
     document.body.appendChild(a); a.click(); a.remove();
   }catch(err){ console.error(err); toastMsg('Download failed. Try again.'); }
 });
@@ -627,12 +657,22 @@ $('#rvDel').addEventListener('click', async () => {
 });
 
 /* ---------- reviews list (from backend) ---------- */
+document.addEventListener('appchange', () => { $('#rvForm').classList.add('hide'); $('#rvList').innerHTML = '<div class="rv-empty">Loading reviews…</div>'; $('#rvSum').classList.add('hide'); myRating = 0; if(auth || !configured) loadReviews(); });
 async function loadReviews(){
   if(!configured){ $('#rvList').innerHTML = '<div class="rv-empty">Reviews will appear here.</div>'; return; }
   try{
+    const app = window.curApp();
     const d = await api('reviews', 'GET');
+    if(app !== window.curApp()) return;                 // user switched app while loading
+    if(d.app !== app) throw new Error('backend_not_updated');  // never show/write another app's reviews
     if(user) fillForm(d.mine);
     const list = $('#rvList'), sum = $('#rvSum');
+    const pg = window.PAGES[app];
+    if(pg.dynRating){
+      const tot = d.dist.reduce((t, n) => t + n, 0) || 1;
+      window.paintRating({ avg: d.count ? d.avg : 0, sm: d.count ? d.count + ' review' + (d.count > 1 ? 's' : '') : 'No ratings yet', bars: d.dist.map(n => Math.round(n * 100 / tot)) });
+      $('#stRate').textContent = d.count ? d.avg.toFixed(1) : '–';
+    }
     if(!d.reviews.length){ list.innerHTML = '<div class="rv-empty">No reviews yet. Be the first!</div>'; sum.classList.add('hide'); return; }
     list.innerHTML = d.reviews.map(x => {
       const r = Math.max(1, Math.min(5, x.rating|0));
